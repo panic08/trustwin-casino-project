@@ -1,7 +1,6 @@
 package eu.panic.authservice.template.enums;
 
-public enum Role {
+public enum AuthorizeType {
     DEFAULT,
-    MODERATOR,
-    ADMIN
+    GOOGLE
 }

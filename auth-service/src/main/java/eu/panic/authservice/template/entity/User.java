@@ -1,6 +1,7 @@
 package eu.panic.authservice.template.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import eu.panic.authservice.template.enums.AuthorizeType;
 import eu.panic.authservice.template.enums.Gender;
 import eu.panic.authservice.template.enums.Role;
 import jakarta.persistence.*;
@@ -62,11 +63,8 @@ public class User implements UserDetails {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class PersonalData{
-        @Column(name = "firstname", nullable = true)
-        private String firstname;
-
-        @Column(name = "lastname", nullable = true)
-        private String lastname;
+        @Column(name = "nickname", nullable = true)
+        private String nickname;
 
         @Column(name = "birthday", nullable = true)
         private String birthday;
@@ -80,11 +78,14 @@ public class User implements UserDetails {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Data{
+        @Column(name = "authorize_type", nullable = false)
+        private AuthorizeType authorizeType;
         @Column(name = "server_seed", nullable = false)
         private String serverSeed;
         @Column(name = "client_seed", nullable = false)
         private String clientSeed;
     }
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -99,22 +100,22 @@ public class User implements UserDetails {
     public String getUsername() {
         return this.username;
     }
-
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return  true;
     }
-
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return this.isAccountNonLocked;
     }
-
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return false;
     }
-
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;

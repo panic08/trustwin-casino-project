@@ -1,14 +1,13 @@
 package eu.panic.authservice.template.service;
 
-import eu.panic.authservice.template.dto.ChangePersonalDataRequest;
-import eu.panic.authservice.template.dto.SignInRequest;
-import eu.panic.authservice.template.dto.SignUpRequest;
-import eu.panic.authservice.template.dto.SignUpResponse;
+import eu.panic.authservice.template.payload.*;
 import eu.panic.authservice.template.entity.User;
+import eu.panic.authservice.template.payload.google.GoogleSignInRequest;
 
 public interface AuthService {
-    SignUpResponse handleSignUp(SignUpRequest signUpRequest);
-    SignUpResponse handleSignIn(SignInRequest signInRequest);
+    SignInResponse handleSignUp(SignUpRequest signUpRequest);
+    SignInResponse handleSignIn(SignInRequest signInRequest);
+    SignInResponse handleSignInByGoogle(GoogleSignInRequest googleSignInRequest);
     User getInfoByJwt(String jwtToken);
     void changePersonalData(String jwtToken, ChangePersonalDataRequest changePersonalDataRequest);
 }

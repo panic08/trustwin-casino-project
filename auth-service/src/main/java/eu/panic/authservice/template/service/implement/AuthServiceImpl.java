@@ -1,40 +1,57 @@
 package eu.panic.authservice.template.service.implement;
 
 import eu.panic.authservice.security.jwt.JwtUtil;
-import eu.panic.authservice.template.dto.ChangePersonalDataRequest;
-import eu.panic.authservice.template.dto.SignInRequest;
-import eu.panic.authservice.template.dto.SignUpRequest;
-import eu.panic.authservice.template.dto.SignUpResponse;
+import eu.panic.authservice.template.enums.AuthorizeType;
+import eu.panic.authservice.template.payload.*;
 import eu.panic.authservice.template.entity.SignInHistory;
 import eu.panic.authservice.template.entity.User;
 import eu.panic.authservice.template.enums.Role;
 import eu.panic.authservice.template.exception.InvalidCredentialsException;
+import eu.panic.authservice.template.payload.google.GoogleApiRequest;
+import eu.panic.authservice.template.payload.google.GoogleApiResponse;
+import eu.panic.authservice.template.payload.google.GoogleSignInRequest;
+import eu.panic.authservice.template.payload.google.GoogleSignInResponse;
 import eu.panic.authservice.template.repository.SignInHistoryRepository;
 import eu.panic.authservice.template.repository.UserRepository;
 import eu.panic.authservice.template.service.AuthService;
+import eu.panic.authservice.util.RandomCharacterGenerator;
 import eu.panic.authservice.util.SeedGeneratorUtil;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 @Service
 @Slf4j
 public class AuthServiceImpl implements AuthService {
-    public AuthServiceImpl(UserRepository userRepository, SignInHistoryRepository signInHistoryRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthServiceImpl(UserRepository userRepository, SignInHistoryRepository signInHistoryRepository, PasswordEncoder passwordEncoder, RestTemplate restTemplate, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.signInHistoryRepository = signInHistoryRepository;
         this.passwordEncoder = passwordEncoder;
+        this.restTemplate = restTemplate;
         this.jwtUtil = jwtUtil;
     }
 
     private final UserRepository userRepository;
     private final SignInHistoryRepository signInHistoryRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RestTemplate restTemplate;
     private final JwtUtil jwtUtil;
+    private static final String google_client_id = "613917991989-ccheeqfpn4dq1lrcmam52ddlfcvd2fmi.apps.googleusercontent.com";
+    private static final String google_client_secret = "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";
+    private static final String google_redirect_uri = "http://localhost:3000/authorize";
+    private static final String GOOGLE_API_OAUTH2_URL = "https://www.googleapis.com/oauth2/v4/token";
     @Override
     @Transactional(rollbackOn = Throwable.class)
-    public SignUpResponse handleSignUp(SignUpRequest signUpRequest) {
+    public SignInResponse handleSignUp(SignUpRequest signUpRequest) {
         log.info("Starting method handleSignUp on service {}, method: handleSignUp", AuthServiceImpl.class);
 
         if (signUpRequest.username().length() < 5 || signUpRequest.username().length() > 12){
@@ -66,8 +83,8 @@ public class AuthServiceImpl implements AuthService {
         user.setIsMultiAccount(userRepository.existsByIpAddress(signUpRequest.data().getIpAddress()));
         user.setIsAccountNonLocked(true);
         user.setIpAddress(signUpRequest.data().getIpAddress());
-        user.setPersonalData(new User.PersonalData(null, null, null, null));
-        user.setData(new User.Data(SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed()));
+        user.setPersonalData(new User.PersonalData(signUpRequest.username(), null, null));
+        user.setData(new User.Data(AuthorizeType.DEFAULT, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed()));
         user.setRegisteredAt(System.currentTimeMillis());
 
         log.info("Saving a new entity user on service {}, method: handleSignUp", AuthServiceImpl.class);
@@ -88,17 +105,17 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("Creating a response for this method on service {}, method: handleSignUp", AuthServiceImpl.class);
 
-        SignUpResponse signUpResponse = new SignUpResponse();
+        SignInResponse signInResponse = new SignInResponse();
 
-        signUpResponse.setJwtToken(jwtUtil.generateToken(user));
-        signUpResponse.setTimestamp(System.currentTimeMillis());
+        signInResponse.setJwtToken(jwtUtil.generateToken(user));
+        signInResponse.setTimestamp(System.currentTimeMillis());
 
-        return signUpResponse;
+        return signInResponse;
     }
 
     @Override
     @Transactional(rollbackOn = Throwable.class)
-    public SignUpResponse handleSignIn(SignInRequest signInRequest) {
+    public SignInResponse handleSignIn(SignInRequest signInRequest) {
         log.info("Starting method handleSignIn on service {}, method: handleSignIn", AuthServiceImpl.class);
 
         log.info("Finding User by Username on service {}, method: handleSignIn", AuthServiceImpl.class);
@@ -123,12 +140,92 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("Creating a response for this method on service {}, method: handleSignUp", AuthServiceImpl.class);
 
-        SignUpResponse signUpResponse = new SignUpResponse();
+        SignInResponse signInResponse = new SignInResponse();
 
-        signUpResponse.setJwtToken(jwtUtil.generateToken(user));
-        signUpResponse.setTimestamp(System.currentTimeMillis());
+        signInResponse.setJwtToken(jwtUtil.generateToken(user));
+        signInResponse.setTimestamp(System.currentTimeMillis());
 
-        return signUpResponse;
+        return signInResponse;
+    }
+
+    @Override
+    @Transactional(rollbackOn = Throwable.class)
+    public SignInResponse handleSignInByGoogle(GoogleSignInRequest googleSignInRequest) {
+        log.info("Starting method handleSignInByGoogle on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        log.info("Creating googleApiRequest request on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        GoogleApiRequest googleApiRequest = new GoogleApiRequest();
+
+        googleApiRequest.setClient_id(google_client_id);
+        googleApiRequest.setClient_secret(google_client_secret);
+        googleApiRequest.setRedirect_uri(google_redirect_uri);
+        googleApiRequest.setCode(URLDecoder.decode(googleSignInRequest.code(), StandardCharsets.UTF_8));
+        googleApiRequest.setGrant_type("authorization_code");
+
+        log.info("Receiving JWT token from Google Api Service on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        ResponseEntity<GoogleApiResponse> googleApiResponseResponseEntity =
+                restTemplate.postForEntity(GOOGLE_API_OAUTH2_URL, googleApiRequest, GoogleApiResponse.class);
+
+        log.info("Decoding Google JWT on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        GoogleSignInResponse googleSignInResponse  = null;
+        try {
+            googleSignInResponse = jwtUtil.decodeJwt(googleApiResponseResponseEntity.getBody().id_token());
+        } catch (GeneralSecurityException e){
+            e.printStackTrace();
+        }
+
+        log.info("Finding User by Email on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        User user = userRepository.findUserByEmail(googleSignInResponse.getEmail());
+
+        log.info("Creating a response for this method on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        SignInResponse signInResponse = new SignInResponse();
+
+        log.info("Check account for \"existence\" on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        if (user != null) {
+            signInResponse.setJwtToken(jwtUtil.generateToken(user));
+            signInResponse.setTimestamp(System.currentTimeMillis());
+        }else{
+            log.info("Creating new entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+            user = new User();
+            user.setUsername(RandomCharacterGenerator.generateRandomCharacters());
+            user.setEmail(googleSignInResponse.getEmail());
+            user.setRole(Role.DEFAULT);
+            user.setPassword(RandomCharacterGenerator.generateRandomCharacters());
+            user.setBalance(0L);
+            user.setIpAddress(googleSignInRequest.data().getIpAddress());
+            user.setData(new User.Data(AuthorizeType.GOOGLE, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed()));
+            user.setPersonalData(new User.PersonalData(googleSignInResponse.getName(), null, null));
+            user.setIsAccountNonLocked(true);
+            user.setIsMultiAccount(userRepository.existsByIpAddress(googleSignInRequest.data().getIpAddress()));
+            user.setRegisteredAt(System.currentTimeMillis());
+
+            log.info("Saving a new entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+            userRepository.save(user);
+
+            signInResponse.setJwtToken(jwtUtil.generateToken(user));
+            signInResponse.setTimestamp(System.currentTimeMillis());
+        }
+        log.info("Creating new entity signInHistory on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        SignInHistory signInHistory = new SignInHistory();
+
+        signInHistory.setUsername(user.getUsername());
+        signInHistory.setData(googleSignInRequest.data());
+        signInHistory.setTimestamp(System.currentTimeMillis());
+
+        log.info("Saving a new entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        signInHistoryRepository.save(signInHistory);
+
+
+        return signInResponse;
     }
 
     @Override
@@ -156,8 +253,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("Creating a new record userPersonalData on service {}, method: changePersonalData", AuthServiceImpl.class);
 
         User.PersonalData userPersonalData = new User.PersonalData(
-                changePersonalDataRequest.firstname(),
-                changePersonalDataRequest.lastname(),
+                changePersonalDataRequest.nickname(),
                 changePersonalDataRequest.birthday(),
                 changePersonalDataRequest.gender()
         );

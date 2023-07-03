@@ -1,4 +1,4 @@
-package eu.panic.authservice.template.dto;
+package eu.panic.authservice.template.payload;
 
 import eu.panic.authservice.template.entity.SignInHistory;
 

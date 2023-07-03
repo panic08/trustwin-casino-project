@@ -1,10 +1,8 @@
 package eu.panic.authservice.template.controller;
 
-import eu.panic.authservice.template.dto.ChangePersonalDataRequest;
-import eu.panic.authservice.template.dto.SignInRequest;
-import eu.panic.authservice.template.dto.SignUpRequest;
-import eu.panic.authservice.template.dto.SignUpResponse;
+import eu.panic.authservice.template.payload.*;
 import eu.panic.authservice.template.entity.User;
+import eu.panic.authservice.template.payload.google.GoogleSignInRequest;
 import eu.panic.authservice.template.service.implement.AuthServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +15,17 @@ public class AuthController {
     private final AuthServiceImpl authService;
 
     @PostMapping("/signUp")
-    private SignUpResponse signUp(@RequestBody SignUpRequest signUpRequest){
+    private SignInResponse signUp(@RequestBody SignUpRequest signUpRequest){
         return authService.handleSignUp(signUpRequest);
     }
 
     @PostMapping("/signIn")
-    private SignUpResponse signIn(@RequestBody SignInRequest signInRequest){
+    private SignInResponse signIn(@RequestBody SignInRequest signInRequest){
         return authService.handleSignIn(signInRequest);
+    }
+    @PostMapping("/signInByGoogle")
+    private SignInResponse signInByGoogle(@RequestBody GoogleSignInRequest googleSignInRequest){
+        return authService.handleSignInByGoogle(googleSignInRequest);
     }
 
     @PostMapping("/getInfoByJwt")

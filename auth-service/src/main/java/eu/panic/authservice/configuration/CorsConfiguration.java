@@ -15,6 +15,11 @@ public class CorsConfiguration implements WebMvcConfigurer {
                 .allowedMethods("POST")
                 .allowedHeaders("*");
 
+        registry.addMapping("/api/auth/signInByGoogle")
+                .allowedOrigins("http://localhost:80")
+                .allowedMethods("POST")
+                .allowedHeaders("*");
+
         registry.addMapping("/api/auth/signUp")
                 .allowedOrigins("http://localhost:80")
                 .allowedOrigins("POST")

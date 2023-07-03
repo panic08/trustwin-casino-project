@@ -1,10 +1,9 @@
-package eu.panic.authservice.template.dto;
+package eu.panic.authservice.template.payload;
 
 import eu.panic.authservice.template.enums.Gender;
-import lombok.Getter;
+
 public record ChangePersonalDataRequest(
-        String firstname,
-        String lastname,
+        String nickname,
         String birthday,
         Gender gender
 ) {
