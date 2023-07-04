@@ -2,6 +2,7 @@ package eu.panic.authservice.template.service.implement;
 
 import eu.panic.authservice.security.jwt.JwtUtil;
 import eu.panic.authservice.template.enums.AuthorizeType;
+import eu.panic.authservice.template.enums.Rank;
 import eu.panic.authservice.template.payload.*;
 import eu.panic.authservice.template.entity.SignInHistory;
 import eu.panic.authservice.template.entity.User;
@@ -26,8 +27,6 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 @Service
 @Slf4j
@@ -55,19 +54,19 @@ public class AuthServiceImpl implements AuthService {
         log.info("Starting method handleSignUp on service {}, method: handleSignUp", AuthServiceImpl.class);
 
         if (signUpRequest.username().length() < 5 || signUpRequest.username().length() > 12){
-            log.warn("Username cannot be less than 5 characters or more than 12 characters on class {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("Username cannot be less than 5 characters or more than 12 characters on service {}, method: handleSignUp", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Username cannot be less than 5 characters or more than 12 characters");
         }
 
         if (signUpRequest.password().length() < 5){
-            log.warn("Password cannot be less than 5 characters on class {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("Password cannot be less than 5 characters on service {}, method: handleSignUp", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Password cannot be less than 5 characters");
         }
 
         if (userRepository.findUserByUsername(signUpRequest.username()) != null
                 ||
                 userRepository.findUserByEmail(signUpRequest.email()) != null){
-            log.warn("An account with this username or email already exists on class {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("An account with this username or email already exists on service {}, method: handleSignUp", AuthServiceImpl.class);
             throw new InvalidCredentialsException("An account with this username or email already exists. Think of another one.");
         }
 
@@ -84,7 +83,7 @@ public class AuthServiceImpl implements AuthService {
         user.setIsAccountNonLocked(true);
         user.setIpAddress(signUpRequest.data().getIpAddress());
         user.setPersonalData(new User.PersonalData(signUpRequest.username(), null, null));
-        user.setData(new User.Data(AuthorizeType.DEFAULT, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed()));
+        user.setData(new User.Data(AuthorizeType.DEFAULT, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed(), Rank.NEWBIE));
         user.setRegisteredAt(System.currentTimeMillis());
 
         log.info("Saving a new entity user on service {}, method: handleSignUp", AuthServiceImpl.class);
@@ -122,7 +121,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findUserByUsername(signInRequest.username());
 
         if (user == null || !passwordEncoder.matches(signInRequest.password(), user.getPassword())) {
-            log.warn("Incorrect login or password on class {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("Incorrect login or password on service {}, method: handleSignUp", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Nice try. Incorrect login or password");
         }
 
@@ -199,7 +198,7 @@ public class AuthServiceImpl implements AuthService {
             user.setPassword(RandomCharacterGenerator.generateRandomCharacters());
             user.setBalance(0L);
             user.setIpAddress(googleSignInRequest.data().getIpAddress());
-            user.setData(new User.Data(AuthorizeType.GOOGLE, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed()));
+            user.setData(new User.Data(AuthorizeType.GOOGLE, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed(), Rank.NEWBIE));
             user.setPersonalData(new User.PersonalData(googleSignInResponse.getName(), null, null));
             user.setIsAccountNonLocked(true);
             user.setIsMultiAccount(userRepository.existsByIpAddress(googleSignInRequest.data().getIpAddress()));
@@ -233,7 +232,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("Starting method getInfoByJwt on service {}, method: getInfoByJwt", AuthServiceImpl.class);
 
         if (!jwtUtil.isJwtValid(jwtToken) || jwtUtil.isTokenExpired(jwtToken)){
-            log.warn("Incorrect JWT token on class {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("Incorrect JWT token on service {}, method: handleSignUp", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
@@ -246,7 +245,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("Starting method changePersonalData on service {}, method: changePersonalData", AuthServiceImpl.class);
 
         if (!jwtUtil.isJwtValid(jwtToken) || jwtUtil.isTokenExpired(jwtToken)){
-            log.warn("Incorrect JWT token on class {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("Incorrect JWT token on service {}, method: handleSignUp", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 

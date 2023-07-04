@@ -1,9 +1,5 @@
 package eu.panic.authservice.security.jwt;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import eu.panic.authservice.template.payload.SignInResponse;
 import eu.panic.authservice.template.payload.google.GoogleSignInResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -12,13 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.math.BigInteger;
-import java.security.Key;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPublicKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;

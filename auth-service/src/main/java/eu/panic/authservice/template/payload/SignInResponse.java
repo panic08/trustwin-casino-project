@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class SignInResponse {
     private String jwtToken;
-    private Long timestamp;
+    private long timestamp;
 }

@@ -1,10 +1,10 @@
-package eu.panic.authservice;
+package eu.panic.replenishmentservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AuthServiceApplication {
+public class ReplenishmentServiceApplication {
     /*
         Coded by panic (Andrey Litvitskiy)
         Relations:
@@ -12,7 +12,7 @@ public class AuthServiceApplication {
             - Github: github.com/panic08
      */
     public static void main(String[] args) {
-        SpringApplication.run(AuthServiceApplication.class, args);
+        SpringApplication.run(ReplenishmentServiceApplication.class, args);
     }
 
 }

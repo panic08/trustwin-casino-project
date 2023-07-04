@@ -3,6 +3,7 @@ package eu.panic.authservice.template.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import eu.panic.authservice.template.enums.AuthorizeType;
 import eu.panic.authservice.template.enums.Gender;
+import eu.panic.authservice.template.enums.Rank;
 import eu.panic.authservice.template.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -84,6 +85,8 @@ public class User implements UserDetails {
         private String serverSeed;
         @Column(name = "client_seed", nullable = false)
         private String clientSeed;
+        @Column(name = "rank", nullable = false)
+        private Rank rank;
     }
     @JsonIgnore
     @Override
