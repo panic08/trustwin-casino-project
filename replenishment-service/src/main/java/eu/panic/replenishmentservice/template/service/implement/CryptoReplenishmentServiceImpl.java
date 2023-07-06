@@ -21,7 +21,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.UUID;
+
 
 @Service
 @Slf4j
@@ -72,15 +76,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         log.info("Checking on payments exists on service {} method: handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
 
-        List<CryptoReplenishmentHash> list = new ArrayList<>();
+        List<CryptoReplenishmentHash> cryptoReplenishmentHashList =
+                replenishmentHashRepository.findCryptoReplenishmentHashesByUsername(userDto.getUsername());
 
-        replenishmentHashRepository.findAllById(Collections.singletonList(userDto.getUsername())).forEach(list::add);
-
-        for (CryptoReplenishmentHash key : list){
+        for (CryptoReplenishmentHash key : cryptoReplenishmentHashList){
             if (key.getCurrency().equals(CryptoCurrency.BTC)){
                 log.warn("Complete the previous payment before starting a new one on service {} method: handlePayByBitcoin",
                         CryptoReplenishmentServiceImpl.class);
-                throw new InvalidCredentialsException("Complete the previous payment before starting a new one");
+                throw new PaymentsExistsException("Complete the previous payment before starting a new one");
             }
         }
 
@@ -116,6 +119,7 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         CryptoReplenishmentHash cryptoReplenishmentHash = new CryptoReplenishmentHash();
 
+        cryptoReplenishmentHash.setId(UUID.randomUUID().toString());
         cryptoReplenishmentHash.setUsername(userDto.getUsername());
         cryptoReplenishmentHash.setWalletId(cryptoReplenishmentResponse.getWalletId());
         cryptoReplenishmentHash.setAmount(cryptoReplenishmentResponse.getAmount());
@@ -150,8 +154,17 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                                 CryptoReplenishmentMessage cryptoReplenishmentMessage = new CryptoReplenishmentMessage(
                                         cryptoReplenishmentHash.getUsername(),
-                                        cryptoReplenishmentHash.getWalletId(),
+                                        input.getPrev_out().getAddr(),
                                         cryptoReplenishmentHash.getAmount(),
+                                        new CryptoReplenishmentMessage.Exchange(
+                                                coinGeckoProviderResponse.getBitcoin().getUsd(),
+                                                coinGeckoProviderResponse.getEthereum().getUsd(),
+                                                coinGeckoProviderResponse.getLitecoin().getUsd(),
+                                                coinGeckoProviderResponse.getTron().getUsd(),
+                                                coinGeckoProviderResponse.getTether().getUsd(),
+                                                coinGeckoProviderResponse.getMaticNetwork().getUsd()
+
+                                        ),
                                         cryptoReplenishmentHash.getCurrency(),
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
@@ -169,10 +182,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     jsonProcessingException.printStackTrace();
                                 }
 
-                                log.info("Sending a replenishment to payment-queue on service {} method: handlePayByBitcoin",
+                                log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByBitcoin",
                                         CryptoReplenishmentServiceImpl.class);
 
-                                rabbitTemplate.convertAndSend("payment-queue", jsonMessage);
+                                rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
                                 return;
                             }
                         }
@@ -235,15 +248,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         log.info("Checking on payments exists on service {} method: handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
 
-        List<CryptoReplenishmentHash> list = new ArrayList<>();
+        List<CryptoReplenishmentHash> cryptoReplenishmentHashList =
+                replenishmentHashRepository.findCryptoReplenishmentHashesByUsername(userDto.getUsername());
 
-        replenishmentHashRepository.findAllById(Collections.singletonList(userDto.getUsername())).forEach(list::add);
-
-        for (CryptoReplenishmentHash key : list){
+        for (CryptoReplenishmentHash key : cryptoReplenishmentHashList){
             if (key.getCurrency().equals(CryptoCurrency.ETH)){
                 log.warn("Complete the previous payment before starting a new one on service {} method: handlePayByEthereum",
                         CryptoReplenishmentServiceImpl.class);
-                throw new InvalidCredentialsException("Complete the previous payment before starting a new one");
+                throw new PaymentsExistsException("Complete the previous payment before starting a new one");
             }
         }
 
@@ -279,6 +291,7 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         CryptoReplenishmentHash cryptoReplenishmentHash = new CryptoReplenishmentHash();
 
+        cryptoReplenishmentHash.setId(UUID.randomUUID().toString());
         cryptoReplenishmentHash.setUsername(userDto.getUsername());
         cryptoReplenishmentHash.setWalletId(cryptoReplenishmentResponse.getWalletId());
         cryptoReplenishmentHash.setAmount(cryptoReplenishmentResponse.getAmount());
@@ -317,8 +330,17 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                                 CryptoReplenishmentMessage cryptoReplenishmentMessage = new CryptoReplenishmentMessage(
                                         cryptoReplenishmentHash.getUsername(),
-                                        cryptoReplenishmentHash.getWalletId(),
+                                        transactionDto.getFrom(),
                                         cryptoReplenishmentHash.getAmount(),
+                                        new CryptoReplenishmentMessage.Exchange(
+                                                coinGeckoProviderResponse.getBitcoin().getUsd(),
+                                                coinGeckoProviderResponse.getEthereum().getUsd(),
+                                                coinGeckoProviderResponse.getLitecoin().getUsd(),
+                                                coinGeckoProviderResponse.getTron().getUsd(),
+                                                coinGeckoProviderResponse.getTether().getUsd(),
+                                                coinGeckoProviderResponse.getMaticNetwork().getUsd()
+
+                                        ),
                                         cryptoReplenishmentHash.getCurrency(),
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
@@ -336,10 +358,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     jsonProcessingException.printStackTrace();
                                 }
 
-                                log.info("Sending a replenishment to payment-queue on service {} method: handlePayByEthereum",
+                                log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByEthereum",
                                         CryptoReplenishmentServiceImpl.class);
 
-                                rabbitTemplate.convertAndSend("payment-queue", jsonMessage);
+                                rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
                                 return;
                         }
                     }
@@ -401,15 +423,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         log.info("Checking on payments exists on service {} method: handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
 
-        List<CryptoReplenishmentHash> list = new ArrayList<>();
+        List<CryptoReplenishmentHash> cryptoReplenishmentHashList =
+                replenishmentHashRepository.findCryptoReplenishmentHashesByUsername(userDto.getUsername());
 
-        replenishmentHashRepository.findAllById(Collections.singletonList(userDto.getUsername())).forEach(list::add);
-
-        for (CryptoReplenishmentHash key : list){
+        for (CryptoReplenishmentHash key : cryptoReplenishmentHashList){
             if (key.getCurrency().equals(CryptoCurrency.LTC)){
                 log.warn("Complete the previous payment before starting a new one on service {} method: handlePayByLitecoin",
                         CryptoReplenishmentServiceImpl.class);
-                throw new InvalidCredentialsException("Complete the previous payment before starting a new one");
+                throw new PaymentsExistsException("Complete the previous payment before starting a new one");
             }
         }
 
@@ -445,6 +466,7 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         CryptoReplenishmentHash cryptoReplenishmentHash = new CryptoReplenishmentHash();
 
+        cryptoReplenishmentHash.setId(UUID.randomUUID().toString());
         cryptoReplenishmentHash.setUsername(userDto.getUsername());
         cryptoReplenishmentHash.setWalletId(cryptoReplenishmentResponse.getWalletId());
         cryptoReplenishmentHash.setAmount(cryptoReplenishmentResponse.getAmount());
@@ -484,8 +506,17 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                                 CryptoReplenishmentMessage cryptoReplenishmentMessage = new CryptoReplenishmentMessage(
                                         cryptoReplenishmentHash.getUsername(),
-                                        cryptoReplenishmentHash.getWalletId(),
+                                        input.getCoin().getAddress(),
                                         cryptoReplenishmentHash.getAmount(),
+                                        new CryptoReplenishmentMessage.Exchange(
+                                                coinGeckoProviderResponse.getBitcoin().getUsd(),
+                                                coinGeckoProviderResponse.getEthereum().getUsd(),
+                                                coinGeckoProviderResponse.getLitecoin().getUsd(),
+                                                coinGeckoProviderResponse.getTron().getUsd(),
+                                                coinGeckoProviderResponse.getTether().getUsd(),
+                                                coinGeckoProviderResponse.getMaticNetwork().getUsd()
+
+                                        ),
                                         cryptoReplenishmentHash.getCurrency(),
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
@@ -503,10 +534,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     jsonProcessingException.printStackTrace();
                                 }
 
-                                log.info("Sending a replenishment to payment-queue on service {} method: handlePayByLitecoin",
+                                log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByLitecoin",
                                         CryptoReplenishmentServiceImpl.class);
 
-                                rabbitTemplate.convertAndSend("payment-queue", jsonMessage);
+                                rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
                                 return;
                             }
                         }
@@ -569,15 +600,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         log.info("Checking on payments exists on service {} method: handlePayByTron", CryptoReplenishmentServiceImpl.class);
 
-        List<CryptoReplenishmentHash> list = new ArrayList<>();
+        List<CryptoReplenishmentHash> cryptoReplenishmentHashList =
+                replenishmentHashRepository.findCryptoReplenishmentHashesByUsername(userDto.getUsername());
 
-        replenishmentHashRepository.findAllById(Collections.singletonList(userDto.getUsername())).forEach(list::add);
-
-        for (CryptoReplenishmentHash key : list){
+        for (CryptoReplenishmentHash key : cryptoReplenishmentHashList){
             if (key.getCurrency().equals(CryptoCurrency.TRX)){
                 log.warn("Complete the previous payment before starting a new one on service {} method: handlePayByTron",
                         CryptoReplenishmentServiceImpl.class);
-                throw new InvalidCredentialsException("Complete the previous payment before starting a new one");
+                throw new PaymentsExistsException("Complete the previous payment before starting a new one");
             }
         }
 
@@ -613,6 +643,7 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         CryptoReplenishmentHash cryptoReplenishmentHash = new CryptoReplenishmentHash();
 
+        cryptoReplenishmentHash.setId(UUID.randomUUID().toString());
         cryptoReplenishmentHash.setUsername(userDto.getUsername());
         cryptoReplenishmentHash.setWalletId(cryptoReplenishmentResponse.getWalletId());
         cryptoReplenishmentHash.setAmount(cryptoReplenishmentResponse.getAmount());
@@ -642,13 +673,26 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                     for (TronProviderResponse.Data datum : tronResponseDto.getBody().getData()) {
                         for (TronProviderResponse.Contract contract : datum.getRaw_data().getContract()) {
                             if (contract.getParameter().getValue().getAmount()/1e6 == cryptoReplenishmentResponse.getAmount() &&
-                                    datum.getRaw_data().getTimestamp() > currentTime){
+                                    datum.getRaw_data().getTimestamp() > currentTime
+                                    &&
+                                    !(contract.getParameter().getValue().getOwner_address().equals(cryptoRabbit.getTrxSecondWallet()))
+
+                            ){
                                 log.info("Payment was founded on service {} method: handlePayByTron", CryptoReplenishmentServiceImpl.class);
 
                                 CryptoReplenishmentMessage cryptoReplenishmentMessage = new CryptoReplenishmentMessage(
                                         cryptoReplenishmentHash.getUsername(),
-                                        cryptoReplenishmentHash.getWalletId(),
+                                        contract.getParameter().getValue().getOwner_address(),
                                         cryptoReplenishmentHash.getAmount(),
+                                        new CryptoReplenishmentMessage.Exchange(
+                                                coinGeckoProviderResponse.getBitcoin().getUsd(),
+                                                coinGeckoProviderResponse.getEthereum().getUsd(),
+                                                coinGeckoProviderResponse.getLitecoin().getUsd(),
+                                                coinGeckoProviderResponse.getTron().getUsd(),
+                                                coinGeckoProviderResponse.getTether().getUsd(),
+                                                coinGeckoProviderResponse.getMaticNetwork().getUsd()
+
+                                        ),
                                         cryptoReplenishmentHash.getCurrency(),
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
@@ -666,10 +710,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     jsonProcessingException.printStackTrace();
                                 }
 
-                                log.info("Sending a replenishment to payment-queue on service {} method: handlePayByTron",
+                                log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByTron",
                                         CryptoReplenishmentServiceImpl.class);
 
-                                rabbitTemplate.convertAndSend("payment-queue", jsonMessage);
+                                rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
                                 return;
                             }
                         }
@@ -732,11 +776,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         log.info("Checking on payments exists on service {} method: handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
 
-        List<CryptoReplenishmentHash> list = new ArrayList<>();
+        List<CryptoReplenishmentHash> cryptoReplenishmentHashList =
+                replenishmentHashRepository.findCryptoReplenishmentHashesByUsername(userDto.getUsername());
 
-        replenishmentHashRepository.findAllById(Collections.singletonList(userDto.getUsername())).forEach(list::add);
-
-        for (CryptoReplenishmentHash key : list){
+        for (CryptoReplenishmentHash key : cryptoReplenishmentHashList){
             if (key.getCurrency().equals(CryptoCurrency.TETHER_ERC20)){
                 log.warn("Complete the previous payment before starting a new one on service {} method: handlePayByTetherERC20",
                         CryptoReplenishmentServiceImpl.class);
@@ -776,6 +819,7 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         CryptoReplenishmentHash cryptoReplenishmentHash = new CryptoReplenishmentHash();
 
+        cryptoReplenishmentHash.setId(UUID.randomUUID().toString());
         cryptoReplenishmentHash.setUsername(userDto.getUsername());
         cryptoReplenishmentHash.setWalletId(cryptoReplenishmentResponse.getWalletId());
         cryptoReplenishmentHash.setAmount(cryptoReplenishmentResponse.getAmount());
@@ -815,8 +859,17 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                             CryptoReplenishmentMessage cryptoReplenishmentMessage = new CryptoReplenishmentMessage(
                                     cryptoReplenishmentHash.getUsername(),
-                                    cryptoReplenishmentHash.getWalletId(),
+                                    resultDTO.getFrom(),
                                     cryptoReplenishmentHash.getAmount(),
+                                    new CryptoReplenishmentMessage.Exchange(
+                                            coinGeckoProviderResponse.getBitcoin().getUsd(),
+                                            coinGeckoProviderResponse.getEthereum().getUsd(),
+                                            coinGeckoProviderResponse.getLitecoin().getUsd(),
+                                            coinGeckoProviderResponse.getTron().getUsd(),
+                                            coinGeckoProviderResponse.getTether().getUsd(),
+                                            coinGeckoProviderResponse.getMaticNetwork().getUsd()
+
+                                    ),
                                     cryptoReplenishmentHash.getCurrency(),
                                     cryptoReplenishmentHash.getTimestamp()
                             );
@@ -834,10 +887,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                 jsonProcessingException.printStackTrace();
                             }
 
-                            log.info("Sending a replenishment to payment-queue on service {} method: handlePayByTetherERC20",
+                            log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByTetherERC20",
                                     CryptoReplenishmentServiceImpl.class);
 
-                            rabbitTemplate.convertAndSend("payment-queue", jsonMessage);
+                            rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
                             return;
                         }
                     }
@@ -899,11 +952,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         log.info("Checking on payments exists on service {} method: handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
 
-        List<CryptoReplenishmentHash> list = new ArrayList<>();
+        List<CryptoReplenishmentHash> cryptoReplenishmentHashList =
+                replenishmentHashRepository.findCryptoReplenishmentHashesByUsername(userDto.getUsername());
 
-        replenishmentHashRepository.findAllById(Collections.singletonList(userDto.getUsername())).forEach(list::add);
-
-        for (CryptoReplenishmentHash key : list){
+        for (CryptoReplenishmentHash key : cryptoReplenishmentHashList){
             if (key.getCurrency().equals(CryptoCurrency.MATIC)){
                 log.warn("Complete the previous payment before starting a new one on service {} method: handlePayByPolygon",
                         CryptoReplenishmentServiceImpl.class);
@@ -943,6 +995,7 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         CryptoReplenishmentHash cryptoReplenishmentHash = new CryptoReplenishmentHash();
 
+        cryptoReplenishmentHash.setId(UUID.randomUUID().toString());
         cryptoReplenishmentHash.setUsername(userDto.getUsername());
         cryptoReplenishmentHash.setWalletId(cryptoReplenishmentResponse.getWalletId());
         cryptoReplenishmentHash.setAmount(cryptoReplenishmentResponse.getAmount());
@@ -981,8 +1034,17 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                             CryptoReplenishmentMessage cryptoReplenishmentMessage = new CryptoReplenishmentMessage(
                                     cryptoReplenishmentHash.getUsername(),
-                                    cryptoReplenishmentHash.getWalletId(),
+                                    responseDto.getFrom(),
                                     cryptoReplenishmentHash.getAmount(),
+                                    new CryptoReplenishmentMessage.Exchange(
+                                            coinGeckoProviderResponse.getBitcoin().getUsd(),
+                                            coinGeckoProviderResponse.getEthereum().getUsd(),
+                                            coinGeckoProviderResponse.getLitecoin().getUsd(),
+                                            coinGeckoProviderResponse.getTron().getUsd(),
+                                            coinGeckoProviderResponse.getTether().getUsd(),
+                                            coinGeckoProviderResponse.getMaticNetwork().getUsd()
+
+                                    ),
                                     cryptoReplenishmentHash.getCurrency(),
                                     cryptoReplenishmentHash.getTimestamp()
                             );
@@ -1000,10 +1062,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                 jsonProcessingException.printStackTrace();
                             }
 
-                            log.info("Sending a replenishment to payment-queue on service {} method: handlePayByPolygon",
+                            log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByPolygon",
                                     CryptoReplenishmentServiceImpl.class);
 
-                            rabbitTemplate.convertAndSend("payment-queue", jsonMessage);
+                            rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
                             return;
                         }
                     }
@@ -1046,12 +1108,10 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
-        List<CryptoReplenishmentHash> cryptoReplenishmentHashes = new ArrayList<>();
-
         log.info("Finding All Hashes by Username on service {} method: getCryptoPayment", CryptoReplenishmentServiceImpl.class);
 
-        replenishmentHashRepository.findAllById(
-                Collections.singletonList(userDtoResponseEntity.getBody().getUsername())).forEach(cryptoReplenishmentHashes::add);
+        List<CryptoReplenishmentHash> cryptoReplenishmentHashes =
+                replenishmentHashRepository.findCryptoReplenishmentHashesByUsername(userDtoResponseEntity.getBody().getUsername());
 
         return cryptoReplenishmentHashes.stream()
                 .filter(p -> p.getCurrency().equals(currency))

@@ -12,6 +12,7 @@ public class CryptoRabbit {
     private final String ethWallet = "";
     private final String ltcWallet = "";
     private final String trxWallet = "";
+    private final String trxSecondWallet = "";
     private final String maticWallet = "";
     private final String tetherERC20Wallet = "";
     private final String etherScanApi = "";
