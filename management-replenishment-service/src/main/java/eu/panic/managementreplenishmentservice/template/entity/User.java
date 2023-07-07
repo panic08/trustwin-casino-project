@@ -1,25 +1,21 @@
-package eu.panic.authservice.template.entity;
+package eu.panic.managementreplenishmentservice.template.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import eu.panic.authservice.template.enums.AuthorizeType;
-import eu.panic.authservice.template.enums.Gender;
-import eu.panic.authservice.template.enums.Rank;
-import eu.panic.authservice.template.enums.Role;
+import eu.panic.managementreplenishmentservice.template.enums.AuthorizeType;
+import eu.panic.managementreplenishmentservice.template.enums.Gender;
+import eu.panic.managementreplenishmentservice.template.enums.Rank;
+import eu.panic.managementreplenishmentservice.template.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
 
 @Entity
 @Table(name = "users_table")
 @Getter
 @Setter
-public class User implements UserDetails {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -107,39 +103,5 @@ public class User implements UserDetails {
         @Column(name = "invited_by", nullable = true)
         private String invitedBy;
     }
-    @JsonIgnore
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
 
-    @Override
-    public String getPassword() {
-        return this.password;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.username;
-    }
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonExpired() {
-        return  true;
-    }
-    @JsonIgnore
-    @Override
-    public boolean isAccountNonLocked() {
-        return this.isAccountNonLocked;
-    }
-    @JsonIgnore
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-    @JsonIgnore
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

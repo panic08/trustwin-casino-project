@@ -84,11 +84,37 @@ public class AuthServiceImpl implements AuthService {
         user.setIpAddress(signUpRequest.data().getIpAddress());
         user.setPersonalData(new User.PersonalData(signUpRequest.username(), null, null));
         user.setData(new User.Data(AuthorizeType.DEFAULT, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed(), Rank.NEWBIE));
+        user.setRefData(new User.RefData(0L, 0L, 1, RandomCharacterGenerator.generateRandomCharacters(10), signUpRequest.referral()));
         user.setRegisteredAt(System.currentTimeMillis());
 
         log.info("Saving a new entity user on service {}, method: handleSignUp", AuthServiceImpl.class);
 
         userRepository.save(user);
+
+        log.info("Updating referral entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        User user1 = userRepository.findUserByRefData_RefLink(user.getRefData().getRefLink());
+
+        User.RefData refData1 = user1.getRefData();
+        refData1.setInvited(refData1.getInvited() + 1);
+
+        if (refData1.getInvited() >= 500L) {
+            refData1.setLevel(5);
+        } else if (refData1.getInvited() >= 250L) {
+            refData1.setLevel(4);
+        } else if (refData1.getInvited() >= 100L) {
+            refData1.setLevel(3);
+        } else if (refData1.getInvited() >= 10L) {
+            refData1.setLevel(2);
+        } else if (refData1.getInvited() >= 0) {
+            refData1.setLevel(1);
+        }
+
+        user1.setRefData(refData1);
+
+        log.info("Saving a referral entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+        userRepository.save(user1);
 
         log.info("Creating a new entity signInHistory on service {}, method: handleSignUp", AuthServiceImpl.class);
 
@@ -101,6 +127,8 @@ public class AuthServiceImpl implements AuthService {
         log.info("Saving a new entity signInHistory on service {}, method: handleSignUp", AuthServiceImpl.class);
 
         signInHistoryRepository.save(signInHistory);
+
+
 
         log.info("Creating a response for this method on service {}, method: handleSignUp", AuthServiceImpl.class);
 
@@ -192,14 +220,15 @@ public class AuthServiceImpl implements AuthService {
         }else{
             log.info("Creating new entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
             user = new User();
-            user.setUsername(RandomCharacterGenerator.generateRandomCharacters());
+            user.setUsername(RandomCharacterGenerator.generateRandomCharacters(70));
             user.setEmail(googleSignInResponse.getEmail());
             user.setRole(Role.DEFAULT);
-            user.setPassword(RandomCharacterGenerator.generateRandomCharacters());
+            user.setPassword(RandomCharacterGenerator.generateRandomCharacters(70));
             user.setBalance(0L);
             user.setIpAddress(googleSignInRequest.data().getIpAddress());
             user.setData(new User.Data(AuthorizeType.GOOGLE, SeedGeneratorUtil.generateSeed(), SeedGeneratorUtil.generateSeed(), Rank.NEWBIE));
             user.setPersonalData(new User.PersonalData(googleSignInResponse.getName(), null, null));
+            user.setRefData(new User.RefData(0L, 0L, 1, RandomCharacterGenerator.generateRandomCharacters(10), googleSignInRequest.referral()));
             user.setIsAccountNonLocked(true);
             user.setIsMultiAccount(userRepository.existsByIpAddress(googleSignInRequest.data().getIpAddress()));
             user.setRegisteredAt(System.currentTimeMillis());
@@ -207,6 +236,31 @@ public class AuthServiceImpl implements AuthService {
             log.info("Saving a new entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
 
             userRepository.save(user);
+
+            log.info("Updating referral entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+            User user1 = userRepository.findUserByRefData_RefLink(user.getRefData().getRefLink());
+
+            User.RefData refData1 = user1.getRefData();
+            refData1.setInvited(refData1.getInvited() + 1);
+
+            if (refData1.getInvited() >= 500L) {
+                refData1.setLevel(5);
+            } else if (refData1.getInvited() >= 250L) {
+                refData1.setLevel(4);
+            } else if (refData1.getInvited() >= 100L) {
+                refData1.setLevel(3);
+            } else if (refData1.getInvited() >= 10L) {
+                refData1.setLevel(2);
+            } else if (refData1.getInvited() >= 0) {
+                refData1.setLevel(1);
+            }
+
+            user1.setRefData(refData1);
+
+            log.info("Saving a referral entity user on service {}, method: handleSignInByGoogle", AuthServiceImpl.class);
+
+            userRepository.save(user1);
 
             signInResponse.setJwtToken(jwtUtil.generateToken(user));
             signInResponse.setTimestamp(System.currentTimeMillis());

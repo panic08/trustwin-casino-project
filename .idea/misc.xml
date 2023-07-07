@@ -8,6 +8,7 @@
         <option value="$PROJECT_DIR$/replenishment-service/pom.xml" />
         <option value="$PROJECT_DIR$/management-replenishment-service/pom.xml" />
         <option value="$PROJECT_DIR$/withdrawal-service/pom.xml" />
+        <option value="$PROJECT_DIR$/game-dice-service/pom.xml" />
       </list>
     </option>
   </component>

@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="management-replenishment-service" />
         <module name="withdrawal-service" />
+        <module name="game-dice-service" />
         <module name="authservice" />
         <module name="replenishment-service" />
       </profile>
@@ -21,6 +22,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-service" options="-parameters" />
       <module name="authservice" options="-parameters" />
+      <module name="game-dice-service" options="-parameters" />
       <module name="management-replenishment-service" options="-parameters" />
       <module name="replenishment-service" options="-parameters" />
       <module name="withdrawal-service" options="-parameters" />

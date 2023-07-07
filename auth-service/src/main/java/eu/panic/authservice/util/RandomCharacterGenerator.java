@@ -3,8 +3,7 @@ package eu.panic.authservice.util;
 import java.util.Random;
 
 public class RandomCharacterGenerator {
-    public static String generateRandomCharacters(){
-        int length = 70;
+    public static String generateRandomCharacters(int length){
         String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW-XYZ012345678=_9";
         StringBuilder sb = new StringBuilder();
 
