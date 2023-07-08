@@ -15,12 +15,12 @@ import java.util.function.Function;
 import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function17;
+import org.jooq.Function22;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row17;
+import org.jooq.Row22;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -139,6 +139,31 @@ public class UsersTable extends TableImpl<UsersTableRecord> {
      */
     public final TableField<UsersTableRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
+    /**
+     * The column <code>public.users_table.earned</code>.
+     */
+    public final TableField<UsersTableRecord, Long> EARNED = createField(DSL.name("earned"), SQLDataType.BIGINT.nullable(false), this, "");
+
+    /**
+     * The column <code>public.users_table.invited</code>.
+     */
+    public final TableField<UsersTableRecord, Long> INVITED = createField(DSL.name("invited"), SQLDataType.BIGINT.nullable(false), this, "");
+
+    /**
+     * The column <code>public.users_table.invited_by</code>.
+     */
+    public final TableField<UsersTableRecord, String> INVITED_BY = createField(DSL.name("invited_by"), SQLDataType.VARCHAR(255), this, "");
+
+    /**
+     * The column <code>public.users_table.level</code>.
+     */
+    public final TableField<UsersTableRecord, Integer> LEVEL = createField(DSL.name("level"), SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>public.users_table.ref_link</code>.
+     */
+    public final TableField<UsersTableRecord, String> REF_LINK = createField(DSL.name("ref_link"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+
     private UsersTable(Name alias, Table<UsersTableRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -237,18 +262,18 @@ public class UsersTable extends TableImpl<UsersTableRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row17 type methods
+    // Row22 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row17<Long, Long, Short, String, Short, String, String, String, Boolean, Boolean, String, String, String, String, Long, String, String> fieldsRow() {
-        return (Row17) super.fieldsRow();
+    public Row22<Long, Long, Short, String, Short, String, String, String, Boolean, Boolean, String, String, String, String, Long, String, String, Long, Long, String, Integer, String> fieldsRow() {
+        return (Row22) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function17<? super Long, ? super Long, ? super Short, ? super String, ? super Short, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function22<? super Long, ? super Long, ? super Short, ? super String, ? super Short, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super Integer, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -256,7 +281,7 @@ public class UsersTable extends TableImpl<UsersTableRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function17<? super Long, ? super Long, ? super Short, ? super String, ? super Short, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function22<? super Long, ? super Long, ? super Short, ? super String, ? super Short, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super Integer, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

@@ -12,12 +12,12 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function10;
+import org.jooq.Function11;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row10;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -66,6 +66,11 @@ public class GamesTable extends TableImpl<GamesTableRecord> {
     public final TableField<GamesTableRecord, String> USERNAME = createField(DSL.name("username"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
+     * The column <code>public.games_table.nickname</code>.
+     */
+    public final TableField<GamesTableRecord, String> NICKNAME = createField(DSL.name("nickname"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    /**
      * The column <code>public.games_table.bet</code>.
      */
     public final TableField<GamesTableRecord, Long> BET = createField(DSL.name("bet"), SQLDataType.BIGINT.nullable(false), this, "");
@@ -78,7 +83,7 @@ public class GamesTable extends TableImpl<GamesTableRecord> {
     /**
      * The column <code>public.games_table.coefficient</code>.
      */
-    public final TableField<GamesTableRecord, String> COEFFICIENT = createField(DSL.name("coefficient"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+    public final TableField<GamesTableRecord, Double> COEFFICIENT = createField(DSL.name("coefficient"), SQLDataType.DOUBLE.nullable(false), this, "");
 
     /**
      * The column <code>public.games_table.client_seed</code>.
@@ -188,18 +193,18 @@ public class GamesTable extends TableImpl<GamesTableRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row10 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Long, String, String, Long, Long, String, String, String, String, Long> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Long, String, String, String, Long, Long, Double, String, String, String, Long> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function10<? super Long, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function11<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super Double, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -207,7 +212,7 @@ public class GamesTable extends TableImpl<GamesTableRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function10<? super Long, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function11<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super Double, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }
