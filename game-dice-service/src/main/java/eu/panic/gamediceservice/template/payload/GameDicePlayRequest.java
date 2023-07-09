@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GameDiceRequest {
+public class GameDicePlayRequest {
     private Long amount;
     private Double chance;
 }

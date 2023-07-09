@@ -1,8 +1,10 @@
 package eu.panic.gamediceservice.template.service;
 
-import eu.panic.gamediceservice.template.payload.GameDiceRequest;
-import eu.panic.gamediceservice.template.payload.GameDiceResponse;
+import eu.panic.gamediceservice.template.entity.Game;
+import eu.panic.gamediceservice.template.payload.GameDicePlayRequest;
+import eu.panic.gamediceservice.template.payload.GameDicePlayResponse;
 
 public interface GameDiceService {
-    GameDiceResponse handlePlayDice(String jwtToken, GameDiceRequest gameDiceRequest);
+    GameDicePlayResponse handlePlayDice(String jwtToken, GameDicePlayRequest gameDicePlayRequest);
+    Game getLastDiceGame(String jwtToken);
 }

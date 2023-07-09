@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class GameDiceResponse {
+public class GameDicePlayResponse {
     private GameState gameState;
     private GameType gameType;
     private Long amount;
