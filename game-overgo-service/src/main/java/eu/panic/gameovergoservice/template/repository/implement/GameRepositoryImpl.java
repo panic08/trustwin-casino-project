@@ -36,6 +36,6 @@ public class GameRepositoryImpl implements GameOvergoRepository {
                 .where(GamesTable.GAMES_TABLE.USERNAME.eq(username))
                 .and(GamesTable.GAMES_TABLE.GAME_TYPE.eq(gameType.toString()))
                 .orderBy(GamesTable.GAMES_TABLE.TIMESTAMP.desc())
-                .fetchOneInto(Game.class);
+                .fetchAnyInto(Game.class);
     }
 }

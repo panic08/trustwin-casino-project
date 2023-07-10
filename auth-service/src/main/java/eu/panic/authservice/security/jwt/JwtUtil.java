@@ -1,11 +1,14 @@
 package eu.panic.authservice.security.jwt;
 
+import eu.panic.authservice.template.dto.GoogleCertsDto;
 import eu.panic.authservice.template.payload.google.GoogleSignInResponse;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -21,6 +24,11 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
+    public JwtUtil(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
+
+    private final RestTemplate restTemplate;
     @Value("${spring.security.jwt.secret}")
     private String secret;
     public String extractUsername(String token) {
@@ -76,23 +84,64 @@ public class JwtUtil {
         /*
             TODO Move the business logic in this method to another class
             */
-        String kid = "9341dedeee2d1869b657fa930300082fe26b3d92";
-        String modulus = "tid8bJCI5FxtvMiVHq8pRZBGIPaG9mEa1akpIC9munzxA3mWoc-KoR1TGkocu76WFthaZnPS31WJbRVChU6g4EMIg7E8Ltpxifk1PQu0qqbLcpnoI62ojsB7l_Z_lkls0NUzTuKGMMtNoJsDrL1BT0UzcnWerh2PwzDAMpfPgafWdT2IYGTx1gNLcNOWpPhDgMSQqUmIPwCmxdan4i4OMd7lJYQ1WQlN8VnQgbRgHrm1zImY6MPqho9jW3Ub5FwGbunwCDrP9a2dD_5Iwm7_lR82iB4BGlu28WxFn0fm5DgZAeAFSGKE1xblC97WrjnPh2XYTx6pxsea_Hn71VcNSQ";
-        String exponent = "AQAB";
+
+        ResponseEntity<GoogleCertsDto> googleCertsDtoResponseEntity =
+                restTemplate.getForEntity("https://www.googleapis.com/oauth2/v3/certs", GoogleCertsDto.class);
+
+//
+//        String kid = "9341dedeee2d1869b657fa930300082fe26b3d92";
+//        String modulus = "tid8bJCI5FxtvMiVHq8pRZBGIPaG9mEa1akpIC9munzxA3mWoc-KoR1TGkocu76WFthaZnPS31WJbRVChU6g4EMIg7E8Ltpxifk1PQu0qqbLcpnoI62ojsB7l_Z_lkls0NUzTuKGMMtNoJsDrL1BT0UzcnWerh2PwzDAMpfPgafWdT2IYGTx1gNLcNOWpPhDgMSQqUmIPwCmxdan4i4OMd7lJYQ1WQlN8VnQgbRgHrm1zImY6MPqho9jW3Ub5FwGbunwCDrP9a2dD_5Iwm7_lR82iB4BGlu28WxFn0fm5DgZAeAFSGKE1xblC97WrjnPh2XYTx6pxsea_Hn71VcNSQ";
+//        String exponent = "AQAB";
 
 
-        BigInteger modulusBigInt = new BigInteger(1, Base64.getUrlDecoder().decode(modulus));
-        BigInteger exponentBigInt = new BigInteger(1, Base64.getUrlDecoder().decode(exponent));
+//        BigInteger modulusBigInt = new BigInteger(1, Base64.getUrlDecoder().decode(modulus));
+//        BigInteger exponentBigInt = new BigInteger(1, Base64.getUrlDecoder().decode(exponent));
+//
+//        RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulusBigInt, exponentBigInt);
+//        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+//        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+//
+//        String kid1 = "676da9d312c39a429932f543e6c1b6e6512e4983";
+//        String modulus1 = "khHQPa75Xf95y1DGdlab8r_Soe9Tklk3Xi0yZhANb2E6YMqci6pYk_6qDVyKr_ixMzH_I6TQxJJNnLtEHrU3-8pTyKzX59kBncOdPoeJRAYYuW1D-ywgYKVVTCwfTQwugLFxcVKYSyKUpoRSunw1K8EJqjsQsCIGIJ9uqGW3SI0FW6AoMlQ7XulrAUqn4agIFFNwszLy9hflSpL2MwCVq0uBL1YWiCXkrsAZrgql9ICW2H9l6BnVL9QFETz84nB_aqGyMwwWoE8bkiVahBaNYw04f2SKqT_nS4FtogorYRPtvJB-ZK0dgMO6_Rdv9z1q4tmxga9qU7ErYPwTPe9Zvw";
+//        String exponent1 = "AQAB";
+//
+//        BigInteger modulusBigInt1 = new BigInteger(1, Base64.getUrlDecoder().decode(modulus1));
+//        BigInteger exponentBigInt1 = new BigInteger(1, Base64.getUrlDecoder().decode(exponent1));
+//
+//        RSAPublicKeySpec keySpec1 = new RSAPublicKeySpec(modulusBigInt1, exponentBigInt1);
+//        KeyFactory keyFactory1 = KeyFactory.getInstance("RSA");
+//        PublicKey publicKey1 = keyFactory.generatePublic(keySpec1);
 
-        RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulusBigInt, exponentBigInt);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+        Jwt<?, ?> jwtd = null;
 
+        for (GoogleCertsDto.KeyDto key : googleCertsDtoResponseEntity.getBody().getKeys()){
+            try {
+                BigInteger modulusBigInt = new BigInteger(1, Base64.getUrlDecoder().decode(key.getN()));
+                BigInteger exponentBigInt = new BigInteger(1, Base64.getUrlDecoder().decode(key.getE()));
 
-        Jwt<?, ?> jwtd = Jwts.parserBuilder()
-                .setSigningKey(publicKey)
-                .build()
-                .parse(jwt);
+                RSAPublicKeySpec keySpec = new RSAPublicKeySpec(modulusBigInt, exponentBigInt);
+                KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+                PublicKey publicKey = keyFactory.generatePublic(keySpec);
+
+                jwtd = Jwts.parserBuilder()
+                        .setSigningKey(publicKey)
+                        .build()
+                        .parse(jwt);
+            }catch (Exception ignored){
+            }
+        }
+
+//        try {
+//            jwtd = Jwts.parserBuilder()
+//                    .setSigningKey(publicKey)
+//                    .build()
+//                    .parse(jwt);
+//        } catch (SignatureException signatureException){
+//            jwtd = Jwts.parserBuilder()
+//                    .setSigningKey(publicKey1)
+//                    .build()
+//                    .parse(jwt);
+//        }
 
         Claims claims = (Claims) jwtd.getBody();
 

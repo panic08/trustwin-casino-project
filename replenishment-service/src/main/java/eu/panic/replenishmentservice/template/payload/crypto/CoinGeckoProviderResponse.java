@@ -1,5 +1,6 @@
 package eu.panic.replenishmentservice.template.payload.crypto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
@@ -10,6 +11,7 @@ public class CoinGeckoProviderResponse {
     private CoinDto tron;
     private CoinDto ripple;
     private CoinDto tether;
+    @JsonProperty("matic-network")
     private CoinDto maticNetwork;
 
     @Getter

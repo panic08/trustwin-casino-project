@@ -84,30 +84,34 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
         log.info("Update referral entity data on service {} method: handleReplenishment", CryptoReplenishmentServiceImpl.class);
 
-        User user1 = userRepository.findUserByRefData_RefLink(user.getRefData().getRefLink());
+        if (user.getRefData().getInvitedBy() != null) {
+            User user1 = userRepository.findUserByRefData_RefLink(user.getRefData().getInvitedBy());
 
-        double percent = 0;
+            double percent = 0;
 
-        switch (user1.getRefData().getLevel()){
-            case 1 -> percent = 0.02;
-            case 2 -> percent = 0.03;
-            case 3 -> percent = 0.04;
-            case 4 -> percent = 0.05;
-            case 5 -> percent = 0.06;
+            switch (user1.getRefData().getLevel()) {
+                case 1 -> percent = 0.02;
+                case 2 -> percent = 0.03;
+                case 3 -> percent = 0.04;
+                case 4 -> percent = 0.05;
+                case 5 -> percent = 0.06;
+            }
+
+            user1.setBalance(
+                    user1.getBalance() + (long) (cryptoReplenishmentMessage.amount() * (cryptoReplenishmentMessage.exchange().getTetherERC20Exchange() / 0.01) * percent)
+            );
+
+            User.RefData refData1 = user1.getRefData();
+
+            refData1.setEarned(
+                    refData1.getEarned() + (long) (cryptoReplenishmentMessage.amount() * (cryptoReplenishmentMessage.exchange().getTetherERC20Exchange() / 0.01) * percent)
+            );
+
+            user1.setRefData(refData1);
+
+            log.info("Saving an entity user1 on service {} method: handleReplenishment", CryptoReplenishmentServiceImpl.class);
+
+            userRepository.save(user1);
         }
-
-        user1.setBalance(
-                user1.getBalance() + (long) (cryptoReplenishmentMessage.amount() * (cryptoReplenishmentMessage.exchange().getTetherERC20Exchange() / 0.01) * percent)
-        );
-
-        User.RefData refData1 = user1.getRefData();
-
-        refData1.setEarned(
-                refData1.getEarned() + (long) (cryptoReplenishmentMessage.amount() * (cryptoReplenishmentMessage.exchange().getTetherERC20Exchange() / 0.01) * percent)
-        );
-
-        user1.setRefData(refData1);
-
-        userRepository.save(user1);
     }
 }

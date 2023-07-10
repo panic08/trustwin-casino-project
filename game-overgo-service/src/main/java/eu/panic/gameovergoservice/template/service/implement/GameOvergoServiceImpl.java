@@ -72,10 +72,7 @@ public class GameOvergoServiceImpl implements GameOvergoService {
 
         gameSession.generateSalt();
 
-        double calculation = 1000000 / (Math.floor(gameSession.generateRandomNumber() * 1000000) + 1) * (1 - 0.03);
-        double result = Math.max(1, calculation);
-
-        double overgoNumber = Double.parseDouble(String.format("%.2f", result));
+        double overgoNumber = Math.ceil(Math.max(1, 1000000 / (Math.floor(gameSession.generateRandomNumber() * 1000000) + 1) * (1 - 0.03)) * 1e2) / 1e2;
 
         Game game = new Game();
 
@@ -126,7 +123,7 @@ public class GameOvergoServiceImpl implements GameOvergoService {
         }
 
         rabbitTemplate.convertAndSend("game-queue", jsonMessage);
-        return null;
+        return gameOvergoPlayResponse;
     }
     @Override
     public Game getLastOvergoGame(String jwtToken) {
