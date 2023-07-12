@@ -10,6 +10,7 @@ import eu.panic.gamediceservice.template.exception.InsufficientFundsException;
 import eu.panic.gamediceservice.template.exception.InvalidCredentialsException;
 import eu.panic.gamediceservice.template.payload.GameDicePlayRequest;
 import eu.panic.gamediceservice.template.payload.GameDicePlayResponse;
+import eu.panic.gamediceservice.template.payload.GameMessage;
 import eu.panic.gamediceservice.template.repository.implement.GameRepositoryImpl;
 import eu.panic.gamediceservice.template.repository.implement.UserRepositoryImpl;
 import eu.panic.gamediceservice.template.service.GameDiceService;
@@ -90,8 +91,6 @@ public class GameDiceServiceImpl implements GameDiceService {
 
         GameDicePlayResponse gameDicePlayResponse = new GameDicePlayResponse();
 
-        gameDicePlayResponse.setGameType(GameType.DICE);
-
         if (diceNumber > (100 - gameDicePlayRequest.getChance())){
             game.setCoefficient(coefficient);
             game.setWin((long) (gameDicePlayRequest.getAmount() * coefficient));
@@ -114,9 +113,18 @@ public class GameDiceServiceImpl implements GameDiceService {
 
         log.info("Creating jsonMessage message for game-queue on service {} method: handlePlayDice", GameDiceServiceImpl.class);
 
+        GameMessage gameMessage = new GameMessage();
+
+        gameMessage.setGameType(GameType.DICE);
+        gameMessage.setUser(userDto);
+        gameMessage.setBet(game.getBet());
+        gameMessage.setWin(game.getWin());
+        gameMessage.setCoefficient(game.getCoefficient());
+        gameMessage.setTimestamp(game.getTimestamp());
+
         String jsonMessage = null;
         try {
-            jsonMessage = objectMapper.writeValueAsString(game);
+            jsonMessage = objectMapper.writeValueAsString(gameMessage);
         } catch (JsonProcessingException jsonProcessingException){
             jsonProcessingException.printStackTrace();
         }

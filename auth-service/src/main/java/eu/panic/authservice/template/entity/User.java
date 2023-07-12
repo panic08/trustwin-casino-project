@@ -45,7 +45,7 @@ public class User implements UserDetails {
     private RefData refData;
 
     @Column(name = "role", nullable = false)
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(name = "balance", nullable = false)
@@ -74,7 +74,7 @@ public class User implements UserDetails {
         private String birthday;
 
         @Column(name = "gender", nullable = true)
-        @Enumerated(value = EnumType.STRING)
+        @Enumerated(EnumType.STRING)
         private Gender gender;
     }
     @Getter
@@ -89,6 +89,7 @@ public class User implements UserDetails {
         @Column(name = "client_seed", nullable = false)
         private String clientSeed;
         @Column(name = "rank", nullable = false)
+        @Enumerated(EnumType.STRING)
         private Rank rank;
     }
     @Getter

@@ -16,7 +16,7 @@ public class CorsConfiguration implements WebMvcConfigurer {
                 .allowedHeaders("*");
         registry.addMapping("/api/game/dice/getLast")
                 .allowedOrigins("http://localhost:80")
-                .allowedMethods("POST")
+                .allowedMethods("GET")
                 .allowedHeaders("*");
     }
 }

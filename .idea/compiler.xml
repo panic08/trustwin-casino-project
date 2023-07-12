@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="management-replenishment-service" />
         <module name="withdrawal-service" />
+        <module name="game-miner-service" />
+        <module name="authservice" />
+        <module name="management-replenishment-service" />
         <module name="game-dice-service" />
         <module name="game-overgo-service" />
-        <module name="authservice" />
         <module name="replenishment-service" />
       </profile>
     </annotationProcessing>
@@ -24,6 +25,7 @@
       <module name="auth-service" options="-parameters" />
       <module name="authservice" options="-parameters" />
       <module name="game-dice-service" options="-parameters" />
+      <module name="game-miner-service" options="-parameters" />
       <module name="game-overgo-service" options="-parameters" />
       <module name="management-replenishment-service" options="-parameters" />
       <module name="replenishment-service" options="-parameters" />

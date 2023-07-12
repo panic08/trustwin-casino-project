@@ -21,7 +21,7 @@ public class GameOvergoController {
             ){
         return gameOvergoService.handlePlayOvergo(jwtToken, gameOvergoPlayRequest);
     }
-    @PostMapping("/getLast")
+    @GetMapping("/getLast")
     private Game getLastOvergoGame(@RequestHeader String jwtToken){
         return gameOvergoService.getLastOvergoGame(jwtToken);
     }

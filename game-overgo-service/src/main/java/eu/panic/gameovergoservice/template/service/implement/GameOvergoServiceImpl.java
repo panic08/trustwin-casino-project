@@ -8,6 +8,7 @@ import eu.panic.gameovergoservice.template.enums.GameState;
 import eu.panic.gameovergoservice.template.enums.GameType;
 import eu.panic.gameovergoservice.template.exception.InsufficientFundsException;
 import eu.panic.gameovergoservice.template.exception.InvalidCredentialsException;
+import eu.panic.gameovergoservice.template.payload.GameMessage;
 import eu.panic.gameovergoservice.template.payload.GameOvergoPlayRequest;
 import eu.panic.gameovergoservice.template.payload.GameOvergoPlayResponse;
 import eu.panic.gameovergoservice.template.repository.implement.GameRepositoryImpl;
@@ -89,7 +90,6 @@ public class GameOvergoServiceImpl implements GameOvergoService {
 
         GameOvergoPlayResponse gameOvergoPlayResponse = new GameOvergoPlayResponse();
 
-        gameOvergoPlayResponse.setGameType(GameType.OVERGO);
         gameOvergoPlayResponse.setMaxCoefficient(overgoNumber);
 
         if (coefficient < overgoNumber){
@@ -113,6 +113,15 @@ public class GameOvergoServiceImpl implements GameOvergoService {
         gameRepository.save(game);
 
         log.info("Creating jsonMessage message for game-queue on service {} method: handlePlayDice", GameOvergoServiceImpl.class);
+
+        GameMessage gameMessage = new GameMessage();
+
+        gameMessage.setGameType(GameType.OVERGO);
+        gameMessage.setUser(userDto);
+        gameMessage.setBet(game.getBet());
+        gameMessage.setWin(game.getWin());
+        gameMessage.setCoefficient(game.getCoefficient());
+        gameMessage.setTimestamp(game.getTimestamp());
 
         String jsonMessage = null;
 

@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 public class GameOvergoPlayResponse {
     private GameState gameState;
-    private GameType gameType;
     private Long amount;
     private double maxCoefficient;
 }

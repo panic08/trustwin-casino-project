@@ -21,7 +21,7 @@ public class GameDiceController {
     ){
         return gameDiceService.handlePlayDice(jwtToken, gameDicePlayRequest);
     }
-    @PostMapping("/getLast")
+    @GetMapping("/getLast")
     private Game getLastDiceGame(@RequestHeader String jwtToken){
         return gameDiceService.getLastDiceGame(jwtToken);
     }

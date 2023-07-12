@@ -9,6 +9,5 @@ import lombok.Setter;
 @Setter
 public class GameDicePlayResponse {
     private GameState gameState;
-    private GameType gameType;
     private Long amount;
 }
