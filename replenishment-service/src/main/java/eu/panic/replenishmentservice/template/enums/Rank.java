@@ -2,10 +2,20 @@ package eu.panic.replenishmentservice.template.enums;
 
 public enum Rank {
     NEWBIE,
-    BRONZE,
-    SILVER,
-    GOLD,
-    PLATINUM,
+    BEGINNER,
+    AMATEUR,
+    GAMBLING,
+    PRO,
+    SHARK,
+    MASTER,
+    GRANDMASTER,
+    CASH_MACHINE,
+    DRAKE,
     DIAMOND,
-    ELITE
+    SUPERIOR,
+    LEGEND,
+    INTERNATIONAL,
+    IMMORTAL,
+    GODLIKE,
+    DIVINE
 }

@@ -13,6 +13,7 @@
         <module name="management-replenishment-service" />
         <module name="game-dice-service" />
         <module name="game-overgo-service" />
+        <module name="management-game-service" />
         <module name="replenishment-service" />
       </profile>
     </annotationProcessing>
@@ -27,6 +28,7 @@
       <module name="game-dice-service" options="-parameters" />
       <module name="game-miner-service" options="-parameters" />
       <module name="game-overgo-service" options="-parameters" />
+      <module name="management-game-service" options="-parameters" />
       <module name="management-replenishment-service" options="-parameters" />
       <module name="replenishment-service" options="-parameters" />
       <module name="withdrawal-service" options="-parameters" />

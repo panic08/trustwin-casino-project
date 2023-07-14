@@ -38,7 +38,7 @@ public class User {
     private PersonalData personalData;
 
     @Column(name = "role", nullable = false)
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(name = "balance", nullable = false)
@@ -67,7 +67,7 @@ public class User {
         private String birthday;
 
         @Column(name = "gender", nullable = true)
-        @Enumerated(value = EnumType.STRING)
+        @Enumerated(EnumType.STRING)
         private Gender gender;
     }
     @Getter
@@ -76,12 +76,14 @@ public class User {
     @NoArgsConstructor
     public static class Data{
         @Column(name = "authorize_type", nullable = false)
+        @Enumerated(EnumType.STRING)
         private AuthorizeType authorizeType;
         @Column(name = "server_seed", nullable = false)
         private String serverSeed;
         @Column(name = "client_seed", nullable = false)
         private String clientSeed;
         @Column(name = "rank", nullable = false)
+        @Enumerated(EnumType.STRING)
         private Rank rank;
     }
 

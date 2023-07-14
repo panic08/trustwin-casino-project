@@ -21,7 +21,8 @@ public class Replenishment {
     @Column(name = "amount", nullable = false)
     private Double amount;
     @Column(name = "payment_method", nullable = false)
-    @Enumerated(value = EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
+    @Column(name = "timestamp", nullable = false)
     private Long timestamp;
 }
