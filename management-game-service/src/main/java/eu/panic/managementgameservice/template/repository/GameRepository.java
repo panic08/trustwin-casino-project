@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface GameRepository {
     List<Game> findAllByUsername(String username);
+    List<Game> findLastTen();
 }

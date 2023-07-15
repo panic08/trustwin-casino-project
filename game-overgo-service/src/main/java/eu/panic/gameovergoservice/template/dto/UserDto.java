@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.relational.core.mapping.Column;
 
 @Getter
 @Setter
@@ -17,6 +18,7 @@ public class UserDto {
     private String email;
     private Data data;
     private PersonalData personalData;
+    private RefData refData;
     private Role role;
     private Long balance;
     private Boolean isMultiAccount;
@@ -41,5 +43,21 @@ public class UserDto {
         private String serverSeed;
         private String clientSeed;
         private Rank rank;
+    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RefData{
+        @Column("invited")
+        private Long invited;
+        @Column("earned")
+        private Long earned;
+        @Column("level")
+        private Integer level;
+        @Column("ref_link")
+        private String refLink;
+        @Column("invited_by")
+        private String invitedBy;
     }
 }

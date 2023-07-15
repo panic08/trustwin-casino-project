@@ -1,6 +1,7 @@
 package eu.panic.managementgameservice.template.repository.implement;
 
 import eu.panic.managementgameservice.generatedClasses.tables.UsersTable;
+import eu.panic.managementgameservice.template.entity.User;
 import eu.panic.managementgameservice.template.enums.Rank;
 import eu.panic.managementgameservice.template.repository.UserRepository;
 import org.jooq.DSLContext;
@@ -27,5 +28,12 @@ public class UserRepositoryImpl implements UserRepository {
                 .set(UsersTable.USERS_TABLE.BALANCE, balance)
                 .where(UsersTable.USERS_TABLE.ID.eq(id))
                 .execute();
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return dslContext.selectFrom(UsersTable.USERS_TABLE)
+                .where(UsersTable.USERS_TABLE.USERNAME.eq(username))
+                .fetchOneInto(User.class);
     }
 }

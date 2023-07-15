@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/game-overgo-service/pom.xml" />
         <option value="$PROJECT_DIR$/game-miner-service/pom.xml" />
         <option value="$PROJECT_DIR$/management-game-service/pom.xml" />
+        <option value="$PROJECT_DIR$/chat-service/pom.xml" />
       </list>
     </option>
   </component>

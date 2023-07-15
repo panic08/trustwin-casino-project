@@ -21,4 +21,12 @@ public class GameRepositoryImpl implements GameRepository {
                 .where(GamesTable.GAMES_TABLE.USERNAME.eq(username))
                 .fetchInto(Game.class);
     }
+
+    @Override
+    public List<Game> findLastTen() {
+        return dslContext.selectFrom(GamesTable.GAMES_TABLE)
+                .orderBy(GamesTable.GAMES_TABLE.TIMESTAMP.desc())
+                .limit(5)
+                .fetchInto(Game.class);
+    }
 }

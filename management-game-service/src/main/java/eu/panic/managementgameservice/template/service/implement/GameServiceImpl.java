@@ -1,7 +1,9 @@
 package eu.panic.managementgameservice.template.service.implement;
 
+import eu.panic.managementgameservice.template.dto.UserDto;
 import eu.panic.managementgameservice.template.entity.Game;
 import eu.panic.managementgameservice.template.entity.Replenishment;
+import eu.panic.managementgameservice.template.entity.User;
 import eu.panic.managementgameservice.template.enums.Rank;
 import eu.panic.managementgameservice.template.payload.GameMessage;
 import eu.panic.managementgameservice.template.repository.implement.GameRepositoryImpl;
@@ -12,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -159,5 +161,31 @@ public class GameServiceImpl implements GameService {
         }
 
         simpMessagingTemplate.convertAndSend("/games/topic", gameMessage);
+    }
+
+    @Override
+    public List<GameMessage> getAllGameMessages() {
+        log.info("Starting method getAllGameMessages on service {} method: getAllGameMessages", GameServiceImpl.class);
+
+        log.info("Finding last ten entities gameList on service {} method: getAllGameMessages", GameServiceImpl.class);
+
+        List<Game> gameList =  gameRepository.findLastTen();
+
+        List<GameMessage> gameMessageList = new ArrayList<>();
+
+        for(Game game : gameList){
+            GameMessage gameMessage = new GameMessage();
+
+            gameMessage.setGameType(game.getGameType());
+            gameMessage.setUser(userRepository.findByUsername(game.getUsername()));
+            gameMessage.setBet(game.getBet());
+            gameMessage.setWin(game.getWin());
+            gameMessage.setCoefficient(game.getCoefficient());
+            gameMessage.setTimestamp(game.getTimestamp());
+
+            gameMessageList.add(gameMessage);
+        }
+
+        return gameMessageList;
     }
 }

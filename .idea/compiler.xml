@@ -12,6 +12,7 @@
         <module name="authservice" />
         <module name="management-replenishment-service" />
         <module name="game-dice-service" />
+        <module name="chat-service" />
         <module name="game-overgo-service" />
         <module name="management-game-service" />
         <module name="replenishment-service" />
@@ -25,6 +26,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="auth-service" options="-parameters" />
       <module name="authservice" options="-parameters" />
+      <module name="chat-service" options="-parameters" />
       <module name="game-dice-service" options="-parameters" />
       <module name="game-miner-service" options="-parameters" />
       <module name="game-overgo-service" options="-parameters" />
