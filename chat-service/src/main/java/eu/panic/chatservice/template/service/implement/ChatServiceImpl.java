@@ -7,8 +7,10 @@ import eu.panic.chatservice.template.enums.MessageType;
 import eu.panic.chatservice.template.enums.Rank;
 import eu.panic.chatservice.template.exception.InvalidCredentialsException;
 import eu.panic.chatservice.template.payload.ChatSendMessageRequest;
+import eu.panic.chatservice.template.payload.MessageMessage;
 import eu.panic.chatservice.template.repository.implement.MessageRepositoryImpl;
 import eu.panic.chatservice.template.repository.implement.ReplenishmentRepositoryImpl;
+import eu.panic.chatservice.template.repository.implement.UserRepositoryImpl;
 import eu.panic.chatservice.template.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +18,23 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @Slf4j
 public class ChatServiceImpl implements ChatService {
-    public ChatServiceImpl(RestTemplate restTemplate, SimpMessagingTemplate simpMessagingTemplate, MessageRepositoryImpl messageRepository, ReplenishmentRepositoryImpl replenishmentRepository) {
+    public ChatServiceImpl(RestTemplate restTemplate, SimpMessagingTemplate simpMessagingTemplate, UserRepositoryImpl userRepository, MessageRepositoryImpl messageRepository, ReplenishmentRepositoryImpl replenishmentRepository) {
         this.restTemplate = restTemplate;
         this.simpMessagingTemplate = simpMessagingTemplate;
+        this.userRepository = userRepository;
         this.messageRepository = messageRepository;
         this.replenishmentRepository = replenishmentRepository;
     }
 
     private final RestTemplate restTemplate;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final UserRepositoryImpl userRepository;
     private final MessageRepositoryImpl messageRepository;
     private final ReplenishmentRepositoryImpl replenishmentRepository;
     private static final String JWT_URL = "http://localhost:8080/api/auth/getInfoByJwt";
@@ -74,15 +79,37 @@ public class ChatServiceImpl implements ChatService {
 
         messageRepository.save(message);
 
-        simpMessagingTemplate.convertAndSend("/chat/topic", message);
+        MessageMessage messageMessage = new MessageMessage();
+
+        messageMessage.setType(message.getType());
+        messageMessage.setUser(userRepository.findByUsername(message.getUsername()));
+        messageMessage.setMessage(message.getMessage());
+        messageMessage.setTimestamp(message.getTimestamp());
+
+        simpMessagingTemplate.convertAndSend("/chat/topic", messageMessage);
     }
 
     @Override
-    public List<Message> getAllMessages() {
+    public List<MessageMessage> getAllMessages() {
         log.info("Starting method getAllMessages on service {} method: getAllMessages", ChatServiceImpl.class);
 
         log.info("Finding last fifty entities message on service {} method: getAllMessages", ChatServiceImpl.class);
 
-        return messageRepository.findLastFiftyMessages();
+        List<Message> messageList = messageRepository.findLastFiftyMessages();
+
+        List<MessageMessage> messageMessageList = new ArrayList<>();
+
+        for (Message message : messageList){
+            MessageMessage messageMessage = new MessageMessage();
+
+            messageMessage.setType(message.getType());
+            messageMessage.setUser(userRepository.findByUsername(message.getUsername()));
+            messageMessage.setMessage(message.getMessage());
+            messageMessage.setTimestamp(message.getTimestamp());
+
+            messageMessageList.add(messageMessage);
+        }
+
+        return messageMessageList;
     }
 }

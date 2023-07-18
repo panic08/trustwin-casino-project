@@ -16,6 +16,7 @@
         <module name="game-overgo-service" />
         <module name="management-game-service" />
         <module name="replenishment-service" />
+        <module name="game-crash-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,6 +28,7 @@
       <module name="auth-service" options="-parameters" />
       <module name="authservice" options="-parameters" />
       <module name="chat-service" options="-parameters" />
+      <module name="game-crash-service" options="-parameters" />
       <module name="game-dice-service" options="-parameters" />
       <module name="game-miner-service" options="-parameters" />
       <module name="game-overgo-service" options="-parameters" />

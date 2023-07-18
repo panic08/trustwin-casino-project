@@ -1,7 +1,7 @@
 package eu.panic.chatservice.template.controller;
 
-import eu.panic.chatservice.template.entity.Message;
 import eu.panic.chatservice.template.payload.ChatSendMessageRequest;
+import eu.panic.chatservice.template.payload.MessageMessage;
 import eu.panic.chatservice.template.service.implement.ChatServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ public class ChatController {
 
     private final ChatServiceImpl chatService;
     @GetMapping("/getAll")
-    private List<Message> getAllMessages(){
+    private List<MessageMessage> getAllMessages(){
         return chatService.getAllMessages();
     }
     @PostMapping("/sendMessage")
