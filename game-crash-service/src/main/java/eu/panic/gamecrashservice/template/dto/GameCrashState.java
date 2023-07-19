@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class CrashState {
+public class GameCrashState {
     private Boolean isStarted;
     private Double coefficient;
 }

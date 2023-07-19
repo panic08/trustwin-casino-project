@@ -18,5 +18,6 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/crash");
+        registry.enableSimpleBroker("/bets");
     }
 }

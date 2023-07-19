@@ -7,11 +7,12 @@ import org.springframework.data.redis.core.index.Indexed;
 
 @RedisHash("crash_bets_hash")
 @Data
-public class CrashBetHash {
+public class GameCrashBetHash {
     @Id
     @Indexed
     private String username;
     private Long bet;
+    @Indexed
     private Boolean isTaken;
     private Double coefficient;
     private Long win;
