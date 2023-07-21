@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GameOvergoPlayRequest {
-    private long amount;
+    private long bet;
     private double chance;
 }

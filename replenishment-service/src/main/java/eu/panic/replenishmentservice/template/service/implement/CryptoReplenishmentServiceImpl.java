@@ -50,14 +50,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.2){
-                    log.warn("Minimal amount for BTC payment is 1.2 USD on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for BTC payment is 1.2 USD");
+                    log.warn("Minimal bet for BTC payment is 1.2 USD on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for BTC payment is 1.2 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal amount for BTC payment is 1.1 EUR on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for BTC payment is 1.1 EUR");
+                    log.warn("Minimal bet for BTC payment is 1.1 EUR on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for BTC payment is 1.1 EUR");
                 }
             }
         }
@@ -222,14 +222,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 2.8){
-                    log.warn("Minimal amount for BTC payment is 2.8 USD on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for ETH payment is 2.8 USD");
+                    log.warn("Minimal bet for BTC payment is 2.8 USD on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for ETH payment is 2.8 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 2.6){
-                    log.warn("Minimal amount for BTC payment is 2.6 EUR on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for ETH payment is 2.6 EUR");
+                    log.warn("Minimal bet for BTC payment is 2.6 EUR on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for ETH payment is 2.6 EUR");
                 }
             }
         }
@@ -397,14 +397,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 2.2){
-                    log.warn("Minimal amount for LTC payment is 2.2 USD on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for LTC payment is 2.2 USD");
+                    log.warn("Minimal bet for LTC payment is 2.2 USD on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for LTC payment is 2.2 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 2){
-                    log.warn("Minimal amount for LTC payment is 2 EUR on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for LTC payment is 2 EUR");
+                    log.warn("Minimal bet for LTC payment is 2 EUR on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for LTC payment is 2 EUR");
                 }
             }
         }
@@ -574,14 +574,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal amount for TRX payment is 1.1 USD on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for TRX payment is 1.1 USD");
+                    log.warn("Minimal bet for TRX payment is 1.1 USD on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for TRX payment is 1.1 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1){
-                    log.warn("Minimal amount for TRX payment is 1 EUR on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for TRX payment is 1 EUR");
+                    log.warn("Minimal bet for TRX payment is 1 EUR on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for TRX payment is 1 EUR");
                 }
             }
         }
@@ -750,14 +750,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.2){
-                    log.warn("Minimal amount for TETHER-ERC20 payment is 1.2 USD on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for TETHER-ERC20 payment is 1.2 USD");
+                    log.warn("Minimal bet for TETHER-ERC20 payment is 1.2 USD on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for TETHER-ERC20 payment is 1.2 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal amount for TETHER-ERC20 payment is 1.1 EUR on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for TETHER-ERC20 payment is 1.1 EUR");
+                    log.warn("Minimal bet for TETHER-ERC20 payment is 1.1 EUR on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for TETHER-ERC20 payment is 1.1 EUR");
                 }
             }
         }
@@ -926,14 +926,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal amount for MATIC payment is 1.1 USD on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for MATIC payment is 1.1 USD");
+                    log.warn("Minimal bet for MATIC payment is 1.1 USD on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for MATIC payment is 1.1 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1){
-                    log.warn("Minimal amount for MATIC payment is 1 EUR on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal amount for MATIC payment is 1 EUR");
+                    log.warn("Minimal bet for MATIC payment is 1 EUR on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimal bet for MATIC payment is 1 EUR");
                 }
             }
         }

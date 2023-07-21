@@ -36,14 +36,14 @@ public class WithdrawalsTableRecord extends UpdatableRecordImpl<WithdrawalsTable
     }
 
     /**
-     * Setter for <code>public.withdrawals_table.amount</code>.
+     * Setter for <code>public.withdrawals_table.bet</code>.
      */
     public void setAmount(Long value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>public.withdrawals_table.amount</code>.
+     * Getter for <code>public.withdrawals_table.bet</code>.
      */
     public Long getAmount() {
         return (Long) get(1);

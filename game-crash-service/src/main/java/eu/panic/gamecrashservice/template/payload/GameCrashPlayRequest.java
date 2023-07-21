@@ -6,5 +6,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GameCrashPlayRequest {
-    private long amount;
+    private long bet;
 }

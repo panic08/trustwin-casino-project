@@ -41,23 +41,23 @@ public class WithdrawalServiceImpl implements WithdrawalService {
         switch (createWithdrawalRequest.getMethod()){
             case BTC -> {
                 if (createWithdrawalRequest.getAmount() < 200){
-                    log.warn("The minimum amount for withdrawal in BTC is 200 coins on service {} method: createWithdrawal",
+                    log.warn("The minimum bet for withdrawal in BTC is 200 coins on service {} method: createWithdrawal",
                             WithdrawalServiceImpl.class);
-                    throw new InvalidCredentialsException("The minimum amount for withdrawal in BTC is 200 coins");
+                    throw new InvalidCredentialsException("The minimum bet for withdrawal in BTC is 200 coins");
                 }
             }
             case ETH -> {
                 if (createWithdrawalRequest.getAmount() < 300){
-                    log.warn("The minimum amount for withdrawal in ETH is 300 coins on service {} method: createWithdrawal",
+                    log.warn("The minimum bet for withdrawal in ETH is 300 coins on service {} method: createWithdrawal",
                             WithdrawalServiceImpl.class);
-                    throw new InvalidCredentialsException("The minimum amount for withdrawal in ETH is 300 coins");
+                    throw new InvalidCredentialsException("The minimum bet for withdrawal in ETH is 300 coins");
                 }
             }
             case LTC -> {
                 if (createWithdrawalRequest.getAmount() < 200){
-                    log.warn("The minimum amount for withdrawal in LTC is 200 coins on service {} method: createWithdrawal",
+                    log.warn("The minimum bet for withdrawal in LTC is 200 coins on service {} method: createWithdrawal",
                             WithdrawalServiceImpl.class);
-                    throw new InvalidCredentialsException("The minimum amount for withdrawal in LTC is 200 coins");
+                    throw new InvalidCredentialsException("The minimum bet for withdrawal in LTC is 200 coins");
                 }
             }
         }

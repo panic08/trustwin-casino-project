@@ -1,7 +1,6 @@
 package eu.panic.gamediceservice.template.payload;
 
 import eu.panic.gamediceservice.template.enums.GameState;
-import eu.panic.gamediceservice.template.enums.GameType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +8,5 @@ import lombok.Setter;
 @Setter
 public class GameDicePlayResponse {
     private GameState gameState;
-    private Long amount;
+    private long win;
 }

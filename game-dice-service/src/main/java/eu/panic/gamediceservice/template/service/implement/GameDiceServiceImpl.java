@@ -51,21 +51,21 @@ public class GameDiceServiceImpl implements GameDiceService {
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
-        if (gameDicePlayRequest.getChance() < 1 || gameDicePlayRequest.getChance() > 95 || gameDicePlayRequest.getAmount() < 1){
+        if (gameDicePlayRequest.getChance() < 1 || gameDicePlayRequest.getChance() > 95 || gameDicePlayRequest.getBet() < 1){
             log.warn("Incorrect Dice data on service {} method: handlePlayDice", GameDiceServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect Dice data");
         }
 
         UserDto userDto = userDtoResponseEntity.getBody();
 
-        if (userDto.getBalance() < gameDicePlayRequest.getAmount()){
+        if (userDto.getBalance() < gameDicePlayRequest.getBet()){
             log.warn("You do not have enough money for this bet on service {} method: handlePlayDice", GameDiceServiceImpl.class);
             throw new InsufficientFundsException("You do not have enough money for this bet");
         }
 
         log.info("Updating entity balance on service {} method: handlePlayDice", GameDiceServiceImpl.class);
 
-        userRepository.updateBalanceById(userDto.getBalance() - gameDicePlayRequest.getAmount(), userDto.getId());
+        userRepository.updateBalanceById(userDto.getBalance() - gameDicePlayRequest.getBet(), userDto.getId());
 
         double coefficient = Math.ceil((100 / gameDicePlayRequest.getChance() - 100 / gameDicePlayRequest.getChance() * 0.01) * 1e2) / 1e2;
 
@@ -81,7 +81,7 @@ public class GameDiceServiceImpl implements GameDiceService {
         game.setGameType(GameType.DICE);
         game.setUsername(userDto.getUsername());
         game.setNickname(userDto.getPersonalData().getNickname());
-        game.setBet(gameDicePlayRequest.getAmount());
+        game.setBet(gameDicePlayRequest.getBet());
         game.setClientSeed(userDto.getData().getClientSeed());
         game.setServerSeed(userDto.getData().getServerSeed());
         game.setSalt(gameSession.getSalt());
@@ -93,18 +93,18 @@ public class GameDiceServiceImpl implements GameDiceService {
 
         if (diceNumber > (100 - gameDicePlayRequest.getChance())){
             game.setCoefficient(coefficient);
-            game.setWin((long) (gameDicePlayRequest.getAmount() * coefficient));
+            game.setWin((long) (gameDicePlayRequest.getBet() * coefficient));
 
             gameDicePlayResponse.setGameState(GameState.WIN);
-            gameDicePlayResponse.setAmount(game.getWin());
+            gameDicePlayResponse.setWin(game.getWin());
 
-            userRepository.updateBalanceById((userDto.getBalance() - gameDicePlayRequest.getAmount()) + game.getWin(), userDto.getId());
+            userRepository.updateBalanceById((userDto.getBalance() - gameDicePlayRequest.getBet()) + game.getWin(), userDto.getId());
         }else{
             game.setCoefficient(0D);
             game.setWin(0L);
 
             gameDicePlayResponse.setGameState(GameState.LOSE);
-            gameDicePlayResponse.setAmount(0L);
+            gameDicePlayResponse.setWin(0L);
         }
 
         log.info("Saving an entity game on service {} method: handlePlayDice", GameDiceServiceImpl.class);

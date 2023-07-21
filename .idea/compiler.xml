@@ -17,10 +17,12 @@
         <module name="management-game-service" />
         <module name="replenishment-service" />
         <module name="game-crash-service" />
+        <module name="game-tower-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="auth-service" target="17" />
+      <module name="game-plinko-service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
@@ -32,6 +34,8 @@
       <module name="game-dice-service" options="-parameters" />
       <module name="game-miner-service" options="-parameters" />
       <module name="game-overgo-service" options="-parameters" />
+      <module name="game-plinko-service" options="-parameters" />
+      <module name="game-tower-service" options="-parameters" />
       <module name="management-game-service" options="-parameters" />
       <module name="management-replenishment-service" options="-parameters" />
       <module name="replenishment-service" options="-parameters" />

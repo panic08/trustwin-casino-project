@@ -25,7 +25,7 @@ public class Withdrawal {
     private String username;
     @Column(name = "wallet_id", nullable = false)
     private String walletId;
-    @Column(name = "amount", nullable = false)
+    @Column(name = "bet", nullable = false)
     private Long amount;
     @Column(name = "timestamp", nullable = false)
     private Long timestamp;

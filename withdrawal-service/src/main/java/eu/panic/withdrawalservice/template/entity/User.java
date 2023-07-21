@@ -37,6 +37,9 @@ public class User {
     @Embedded
     private PersonalData personalData;
 
+    @Embedded
+    private RefData refData;
+
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -55,11 +58,12 @@ public class User {
 
     @Column(name = "registeredAt", nullable = false)
     private Long registeredAt;
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PersonalData{
+    public static class PersonalData {
         @Column(name = "nickname", nullable = true)
         private String nickname;
 
@@ -70,13 +74,13 @@ public class User {
         @Enumerated(EnumType.STRING)
         private Gender gender;
     }
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Data{
+    public static class Data {
         @Column(name = "authorize_type", nullable = false)
-        @Enumerated(EnumType.STRING)
         private AuthorizeType authorizeType;
         @Column(name = "server_seed", nullable = false)
         private String serverSeed;
@@ -87,4 +91,20 @@ public class User {
         private Rank rank;
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RefData {
+        @Column(name = "invited", nullable = false)
+        private Long invited;
+        @Column(name = "earned", nullable = false)
+        private Long earned;
+        @Column(name = "level", nullable = false)
+        private Integer level;
+        @Column(name = "ref_link", nullable = false)
+        private String refLink;
+        @Column(name = "invited_by", nullable = true)
+        private String invitedBy;
+    }
 }

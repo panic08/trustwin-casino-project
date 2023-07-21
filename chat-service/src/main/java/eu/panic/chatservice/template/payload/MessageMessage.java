@@ -11,5 +11,5 @@ public class MessageMessage {
     private MessageType type;
     private User user;
     private String message;
-    private Long timestamp;
+    private long timestamp;
 }

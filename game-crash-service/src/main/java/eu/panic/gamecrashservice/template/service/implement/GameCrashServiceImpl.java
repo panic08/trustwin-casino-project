@@ -58,14 +58,14 @@ public class GameCrashServiceImpl implements GameCrashService {
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
-        if (gameCrashPlayRequest.getAmount() > 100000 || gameCrashPlayRequest.getAmount() < 1){
+        if (gameCrashPlayRequest.getBet() > 100000 || gameCrashPlayRequest.getBet() < 1){
             log.warn("Incorrect Crash data on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect Crash data");
         }
 
         UserDto userDto = userDtoResponseEntity.getBody();
 
-        if (userDto.getBalance() < gameCrashPlayRequest.getAmount()){
+        if (userDto.getBalance() < gameCrashPlayRequest.getBet()){
             log.warn("You do not have enough money for this bet on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
             throw new InsufficientFundsException("You do not have enough money for this bet");
         }
@@ -82,14 +82,14 @@ public class GameCrashServiceImpl implements GameCrashService {
 
         log.info("Updating user balance by Id on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
 
-        userRepository.updateBalanceById(userDto.getBalance() - gameCrashPlayRequest.getAmount(), userDto.getId());
+        userRepository.updateBalanceById(userDto.getBalance() - gameCrashPlayRequest.getBet(), userDto.getId());
 
         log.info("Creating new hash crashBetHash on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
 
         GameCrashBetHash gameCrashBetHash = new GameCrashBetHash();
 
         gameCrashBetHash.setUsername(userDto.getUsername());
-        gameCrashBetHash.setBet(gameCrashPlayRequest.getAmount());
+        gameCrashBetHash.setBet(gameCrashPlayRequest.getBet());
         gameCrashBetHash.setIsTaken(false);
         gameCrashBetHash.setWin(null);
         gameCrashBetHash.setCoefficient(1.00);

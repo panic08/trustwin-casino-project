@@ -51,21 +51,21 @@ public class GameOvergoServiceImpl implements GameOvergoService {
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
-        if (gameOvergoPlayRequest.getAmount() < 1 || gameOvergoPlayRequest.getChance() < 0.001 || gameOvergoPlayRequest.getChance() > 95.098){
+        if (gameOvergoPlayRequest.getBet() < 1 || gameOvergoPlayRequest.getChance() < 0.001 || gameOvergoPlayRequest.getChance() > 95.098){
             log.warn("Incorrect Overgo data on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect Overgo data");
         }
 
         UserDto userDto = userDtoResponseEntity.getBody();
 
-        if (userDto.getBalance() < gameOvergoPlayRequest.getAmount()){
+        if (userDto.getBalance() < gameOvergoPlayRequest.getBet()){
             log.warn("You do not have enough money for this bet on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
             throw new InsufficientFundsException("You do not have enough money for this bet");
         }
 
         log.info("Updating entity balance on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
 
-        userRepository.updateBalanceById(userDto.getBalance() - gameOvergoPlayRequest.getAmount(), userDto.getId());
+        userRepository.updateBalanceById(userDto.getBalance() - gameOvergoPlayRequest.getBet(), userDto.getId());
 
         double coefficient = Math.ceil((100 / gameOvergoPlayRequest.getChance() - 100 / gameOvergoPlayRequest.getChance() * 0.03) * 1e2) / 1e2;
 
@@ -80,7 +80,7 @@ public class GameOvergoServiceImpl implements GameOvergoService {
         game.setGameType(GameType.OVERGO);
         game.setUsername(userDto.getUsername());
         game.setNickname(userDto.getPersonalData().getNickname());
-        game.setBet(gameOvergoPlayRequest.getAmount());
+        game.setBet(gameOvergoPlayRequest.getBet());
         game.setClientSeed(userDto.getData().getClientSeed());
         game.setServerSeed(userDto.getData().getServerSeed());
         game.setSalt(gameSession.getSalt());
@@ -97,15 +97,15 @@ public class GameOvergoServiceImpl implements GameOvergoService {
             game.setCoefficient(coefficient);
 
             gameOvergoPlayResponse.setGameState(GameState.WIN);
-            gameOvergoPlayResponse.setAmount(game.getWin());
+            gameOvergoPlayResponse.setWin(game.getWin());
 
-            userRepository.updateBalanceById((userDto.getBalance() - gameOvergoPlayRequest.getAmount()) + game.getWin(), userDto.getId());
+            userRepository.updateBalanceById((userDto.getBalance() - gameOvergoPlayRequest.getBet()) + game.getWin(), userDto.getId());
         }else{
             game.setWin(0L);
             game.setCoefficient(0D);
 
             gameOvergoPlayResponse.setGameState(GameState.LOSE);
-            gameOvergoPlayResponse.setAmount(game.getWin());
+            gameOvergoPlayResponse.setWin(game.getWin());
         }
 
         log.info("Saving an entity game on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
@@ -126,7 +126,7 @@ public class GameOvergoServiceImpl implements GameOvergoService {
         String jsonMessage = null;
 
         try {
-            jsonMessage = objectMapper.writeValueAsString(game);
+            jsonMessage = objectMapper.writeValueAsString(gameMessage);
         }catch (JsonProcessingException jsonProcessingException){
             jsonProcessingException.printStackTrace();
         }

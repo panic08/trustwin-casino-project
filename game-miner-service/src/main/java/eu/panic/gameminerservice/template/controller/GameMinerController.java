@@ -1,7 +1,7 @@
 package eu.panic.gameminerservice.template.controller;
 
 import eu.panic.gameminerservice.template.entity.Game;
-import eu.panic.gameminerservice.template.hash.MinerSessionHash;
+import eu.panic.gameminerservice.template.hash.GameMinerSessionHash;
 import eu.panic.gameminerservice.template.payload.GameMinerCreateRequest;
 import eu.panic.gameminerservice.template.payload.GameMinerCreateResponse;
 import eu.panic.gameminerservice.template.payload.GameMinerPlayRequest;
@@ -38,7 +38,7 @@ public class GameMinerController {
         return gameMinerService.handleBetTaking(jwtToken);
     }
     @GetMapping("/getCurrent")
-    private MinerSessionHash getCurrentMinerGame(
+    private GameMinerSessionHash getCurrentMinerGame(
             @RequestHeader String jwtToken
     ){
         return gameMinerService.getCurrentMinerGame(jwtToken);

@@ -14,7 +14,14 @@
         <option value="$PROJECT_DIR$/management-game-service/pom.xml" />
         <option value="$PROJECT_DIR$/chat-service/pom.xml" />
         <option value="$PROJECT_DIR$/game-crash-service/pom.xml" />
+        <option value="$PROJECT_DIR$/game-plinko-service/pom.xml" />
+        <option value="$PROJECT_DIR$/game-tower-service/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/game-plinko-service/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_17" default="true" project-jdk-name="corretto-17" project-jdk-type="JavaSDK">

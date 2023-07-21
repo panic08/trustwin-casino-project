@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class GameMinerCreateResponse {
-    private long amount;
+    private long win;
     private double coefficient;
     private List<Integer> picked;
 }
