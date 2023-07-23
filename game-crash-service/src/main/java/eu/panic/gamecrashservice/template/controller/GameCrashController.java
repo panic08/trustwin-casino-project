@@ -1,6 +1,7 @@
 package eu.panic.gamecrashservice.template.controller;
 
 import eu.panic.gamecrashservice.template.entity.Game;
+import eu.panic.gamecrashservice.template.hash.GameCrashBetHash;
 import eu.panic.gamecrashservice.template.payload.GameCrashPlayRequest;
 import eu.panic.gamecrashservice.template.payload.GameCrashTakeResponse;
 import eu.panic.gamecrashservice.template.service.implement.GameCrashServiceImpl;
@@ -34,5 +35,9 @@ public class GameCrashController {
     @GetMapping("/getLast")
     private Game getLastCrashGame(){
         return gameCrashService.getLastCrashGame();
+    }
+    @GetMapping("/getAllBets")
+    private List<GameCrashBetHash> getAllCrashBets(){
+        return gameCrashService.getAllCrashBets();
     }
 }

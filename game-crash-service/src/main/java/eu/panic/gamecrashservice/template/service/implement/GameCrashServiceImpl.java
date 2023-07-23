@@ -24,6 +24,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -171,6 +172,13 @@ public class GameCrashServiceImpl implements GameCrashService {
         return gameRepository.findLastGameByGameType(GameType.CRASH);
     }
 
+    @Override
+    public List<GameCrashBetHash> getAllCrashBets() {
+        log.info("Starting method getAllCrashBets on service {} method: getAllCrashBets", GameCrashServiceImpl.class);
+
+        return (List<GameCrashBetHash>) gameCrashBetHashRepository.findAll();
+    }
+
     @Scheduled(fixedRate = 3000)
     private void taskPlayCrash() {
         log.info("Starting method taskPlayCrash on service {} method: taskPlayCrash", GameCrashServiceImpl.class);
@@ -188,7 +196,7 @@ public class GameCrashServiceImpl implements GameCrashService {
         while (currentSeconds >= 0) {
             gameCrashTimerEvent.setValue(Math.floor(currentSeconds * 1e1) / 1e1);
 
-            simpMessagingTemplate.convertAndSend("/crash/topic", gameCrashTimerEvent);
+            simpMessagingTemplate.convertAndSend("/slider/topic", gameCrashTimerEvent);
 
             currentSeconds -= 0.1;
 
@@ -218,11 +226,11 @@ public class GameCrashServiceImpl implements GameCrashService {
             start+= 0.001;
             if (Math.floor(start * 1e2)/1e2 != tempNumber) {
                 gameCrashSliderEvent.setValue(Math.floor(start * 1e2)/1e2);
-
+                //              log.info("{}", Math.floor(start * 1e2)/1e2);
                 if (Math.floor(start * 1e2)/1e2 == crashNumber){
                     gameCrashSliderEvent.setCrashed(true);
 
-                    simpMessagingTemplate.convertAndSend("/crash/topic", gameCrashSliderEvent);
+                    simpMessagingTemplate.convertAndSend("/slider/topic", gameCrashSliderEvent);
                     break;
                 }
 
@@ -230,7 +238,7 @@ public class GameCrashServiceImpl implements GameCrashService {
 
                 gameCrashState.setCoefficient(Math.floor(start * 1e2)/1e2);
 
-                simpMessagingTemplate.convertAndSend("/crash/topic", gameCrashSliderEvent);
+                simpMessagingTemplate.convertAndSend("/slider/topic", gameCrashSliderEvent);
             }
             tempNumber = Math.floor(start * 1e2)/1e2;
 
@@ -240,6 +248,8 @@ public class GameCrashServiceImpl implements GameCrashService {
                 e.printStackTrace();
             }
         }
+
+        log.info("Deleting all crashBetHashes on service {} method: taskPlayCrash", GameCrashServiceImpl.class);
 
         gameCrashBetHashRepository.deleteAll();
 
@@ -260,6 +270,6 @@ public class GameCrashServiceImpl implements GameCrashService {
 
         gameRepository.save(game);
 
-        simpMessagingTemplate.convertAndSend("/bets/topic", new Object());
+        simpMessagingTemplate.convertAndSend("/bets/topic", new ArrayList<>());
     }
 }

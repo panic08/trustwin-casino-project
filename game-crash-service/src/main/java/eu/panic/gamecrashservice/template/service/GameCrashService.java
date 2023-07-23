@@ -1,6 +1,7 @@
 package eu.panic.gamecrashservice.template.service;
 
 import eu.panic.gamecrashservice.template.entity.Game;
+import eu.panic.gamecrashservice.template.hash.GameCrashBetHash;
 import eu.panic.gamecrashservice.template.payload.GameCrashPlayRequest;
 import eu.panic.gamecrashservice.template.payload.GameCrashTakeResponse;
 
@@ -11,4 +12,5 @@ public interface GameCrashService {
     GameCrashTakeResponse handleBetTaking(String jwtToken);
     List<Game> getLastTwentyCrashGames();
     Game getLastCrashGame();
+    List<GameCrashBetHash> getAllCrashBets();
 }
