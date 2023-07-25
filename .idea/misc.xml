@@ -17,6 +17,7 @@
         <option value="$PROJECT_DIR$/game-plinko-service/pom.xml" />
         <option value="$PROJECT_DIR$/game-tower-service/pom.xml" />
         <option value="$PROJECT_DIR$/bonus-service/pom.xml" />
+        <option value="$PROJECT_DIR$/game-jackpot-service/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">

@@ -1,24 +1,25 @@
-package eu.panic.gamecrashservice.template.hash;
+package eu.panic.gamejackpotservice.template.hash;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import eu.panic.gamecrashservice.template.dto.UserDto;
+import eu.panic.gamejackpotservice.template.dto.UserDto;
+import eu.panic.gamejackpotservice.template.enums.JackpotRoom;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
-@RedisHash("crash_bets_hash")
+@RedisHash("jackpot_bets_hash")
 @Data
-public class GameCrashBetHash {
+public class GameJackpotBetHash {
     @Id
     @Indexed
     @JsonIgnore
-    private String username;
+    private String id;
     private UserDto user;
     private Long bet;
     @Indexed
-    private Boolean isTaken;
-    private Double coefficient;
-    private Long win;
+    private JackpotRoom room;
+    private Long ticketsStarts;
+    private Long ticketsEnds;
     private Long timestamp;
 }

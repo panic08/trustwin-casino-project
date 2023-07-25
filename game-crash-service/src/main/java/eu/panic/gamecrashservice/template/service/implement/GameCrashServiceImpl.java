@@ -71,14 +71,14 @@ public class GameCrashServiceImpl implements GameCrashService {
             throw new InsufficientFundsException("You do not have enough money for this bet");
         }
 
-        if (gameCrashState.getIsStarted()){
-            log.warn("You cannot place a bet as the game has already started on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
-            throw new InvalidCredentialsException("You cannot place a bet as the game has already started");
-        }
-
         if (gameCrashBetHashRepository.findCrashBetHashByUsername(userDto.getUsername()) != null){
             log.warn("You have already placed your bet, wait for the game to end on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
             throw new InvalidCredentialsException("You have already placed your bet, wait for the game to end");
+        }
+
+        if (gameCrashState.getIsStarted()){
+            log.warn("You cannot place a bet as the game has already started on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
+            throw new InvalidCredentialsException("You cannot place a bet as the game has already started");
         }
 
         log.info("Updating user balance by Id on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
@@ -90,6 +90,7 @@ public class GameCrashServiceImpl implements GameCrashService {
         GameCrashBetHash gameCrashBetHash = new GameCrashBetHash();
 
         gameCrashBetHash.setUsername(userDto.getUsername());
+        gameCrashBetHash.setUser(userDto);
         gameCrashBetHash.setBet(gameCrashPlayRequest.getBet());
         gameCrashBetHash.setIsTaken(false);
         gameCrashBetHash.setWin(null);
@@ -179,15 +180,14 @@ public class GameCrashServiceImpl implements GameCrashService {
         return (List<GameCrashBetHash>) gameCrashBetHashRepository.findAll();
     }
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRate = 4000)
     private void taskPlayCrash() {
         log.info("Starting method taskPlayCrash on service {} method: taskPlayCrash", GameCrashServiceImpl.class);
 
         gameCrashState.setIsStarted(false);
         gameCrashState.setCoefficient(1.00);
 
-        double seconds = 10000 / 1000.0;
-        double currentSeconds = seconds;
+        double currentSeconds = 10d;
 
         GameCrashTimerEvent gameCrashTimerEvent = new GameCrashTimerEvent();
 

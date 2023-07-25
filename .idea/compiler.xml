@@ -8,17 +8,18 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="withdrawal-service" />
+        <module name="game-jackpot-service" />
         <module name="game-miner-service" />
-        <module name="authservice" />
         <module name="management-replenishment-service" />
         <module name="game-dice-service" />
         <module name="chat-service" />
         <module name="game-overgo-service" />
+        <module name="replenishment-service" />
+        <module name="game-tower-service" />
+        <module name="authservice" />
         <module name="management-game-service" />
         <module name="bonus-service" />
-        <module name="replenishment-service" />
         <module name="game-crash-service" />
-        <module name="game-tower-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -34,6 +35,7 @@
       <module name="chat-service" options="-parameters" />
       <module name="game-crash-service" options="-parameters" />
       <module name="game-dice-service" options="-parameters" />
+      <module name="game-jackpot-service" options="-parameters" />
       <module name="game-miner-service" options="-parameters" />
       <module name="game-overgo-service" options="-parameters" />
       <module name="game-plinko-service" options="-parameters" />
