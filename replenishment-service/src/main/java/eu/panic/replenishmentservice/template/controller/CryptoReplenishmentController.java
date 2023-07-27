@@ -15,8 +15,8 @@ public class CryptoReplenishmentController {
     }
 
     private final CryptoReplenishmentServiceImpl cryptoReplenishmentService;
-    @GetMapping("/getCryptoPayment")
-    private CryptoReplenishmentHash getCryptoPayment(
+    @GetMapping("/getCurrentCryptoPayment")
+    private CryptoReplenishmentHash getCurrentCryptoPayment(
             @RequestHeader String jwtToken,
             @RequestParam(name = "currency") CryptoCurrency currency
     ){

@@ -16,6 +16,7 @@
         <module name="game-overgo-service" />
         <module name="replenishment-service" />
         <module name="game-tower-service" />
+        <module name="notification-service" />
         <module name="authservice" />
         <module name="management-game-service" />
         <module name="bonus-service" />
@@ -42,6 +43,7 @@
       <module name="game-tower-service" options="-parameters" />
       <module name="management-game-service" options="-parameters" />
       <module name="management-replenishment-service" options="-parameters" />
+      <module name="notification-service" options="-parameters" />
       <module name="replenishment-service" options="-parameters" />
       <module name="withdrawal-service" options="-parameters" />
     </option>

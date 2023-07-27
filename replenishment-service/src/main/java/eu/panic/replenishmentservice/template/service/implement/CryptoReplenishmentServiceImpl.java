@@ -11,6 +11,7 @@ import eu.panic.replenishmentservice.template.hash.CryptoReplenishmentHash;
 import eu.panic.replenishmentservice.template.payload.CryptoReplenishmentMessage;
 import eu.panic.replenishmentservice.template.payload.CryptoReplenishmentRequest;
 import eu.panic.replenishmentservice.template.payload.CryptoReplenishmentResponse;
+import eu.panic.replenishmentservice.template.payload.NotificationMessage;
 import eu.panic.replenishmentservice.template.payload.crypto.*;
 import eu.panic.replenishmentservice.template.rabbit.CryptoRabbit;
 import eu.panic.replenishmentservice.template.repository.ReplenishmentHashRepository;
@@ -169,6 +170,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
 
+                                NotificationMessage notificationMessage = new NotificationMessage();
+
+                                notificationMessage.setUsername(cryptoReplenishmentHash.getUsername());
+                                notificationMessage.setMessage("You have successfully completed your balance. If the funds have not yet been credited, please wait and reload our site.");
+
                                 log.info("Deleting old payment-hash on service {} method: handlePayByBitcoin",
                                         CryptoReplenishmentServiceImpl.class);
 
@@ -176,8 +182,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                                 String jsonMessage = null;
 
+                                String jsonMessage1 = null;
+
                                 try {
                                     jsonMessage = objectMapper.writeValueAsString(cryptoReplenishmentMessage);
+                                    jsonMessage1 = objectMapper.writeValueAsString(notificationMessage);
                                 }catch (JsonProcessingException jsonProcessingException){
                                     jsonProcessingException.printStackTrace();
                                 }
@@ -186,6 +195,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                         CryptoReplenishmentServiceImpl.class);
 
                                 rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
+
+                                log.info("Sending a replenishment to notification-queue on service {} method: handlePayByBitcoin",
+                                        CryptoReplenishmentServiceImpl.class);
+
+                                rabbitTemplate.convertAndSend("notification-queue", jsonMessage1);
                                 return;
                             }
                         }
@@ -345,23 +359,36 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
 
-                                log.info("Deleting old payment-hash on service {} method: handlePayByEthereum",
-                                        CryptoReplenishmentServiceImpl.class);
+                            NotificationMessage notificationMessage = new NotificationMessage();
 
-                                replenishmentHashRepository.delete(cryptoReplenishmentHash);
+                            notificationMessage.setUsername(cryptoReplenishmentHash.getUsername());
+                            notificationMessage.setMessage("You have successfully completed your balance. If the funds have not yet been credited, please wait and reload our site.");
 
-                                String jsonMessage = null;
+                            log.info("Deleting old payment-hash on service {} method: handlePayByEthereum",
+                                    CryptoReplenishmentServiceImpl.class);
 
-                                try {
-                                    jsonMessage = objectMapper.writeValueAsString(cryptoReplenishmentMessage);
-                                }catch (JsonProcessingException jsonProcessingException){
-                                    jsonProcessingException.printStackTrace();
-                                }
+                            replenishmentHashRepository.delete(cryptoReplenishmentHash);
 
-                                log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByEthereum",
-                                        CryptoReplenishmentServiceImpl.class);
+                            String jsonMessage = null;
 
-                                rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
+                            String jsonMessage1 = null;
+
+                            try {
+                                jsonMessage = objectMapper.writeValueAsString(cryptoReplenishmentMessage);
+                                jsonMessage1 = objectMapper.writeValueAsString(notificationMessage);
+                            }catch (JsonProcessingException jsonProcessingException){
+                                jsonProcessingException.printStackTrace();
+                            }
+
+                            log.info("Sending a replenishment to replenishment-queue on service {} method: handlePayByEthereum",
+                                    CryptoReplenishmentServiceImpl.class);
+
+                            rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
+
+                            log.info("Sending a replenishment to notification-queue on service {} method: handlePayByEthereum",
+                                    CryptoReplenishmentServiceImpl.class);
+
+                            rabbitTemplate.convertAndSend("notification-queue", jsonMessage1);
                                 return;
                         }
                     }
@@ -521,6 +548,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
 
+                                NotificationMessage notificationMessage = new NotificationMessage();
+
+                                notificationMessage.setUsername(cryptoReplenishmentHash.getUsername());
+                                notificationMessage.setMessage("You have successfully completed your balance. If the funds have not yet been credited, please wait and reload our site.");
+
                                 log.info("Deleting old payment-hash on service {} method: handlePayByLitecoin",
                                         CryptoReplenishmentServiceImpl.class);
 
@@ -528,9 +560,12 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                                 String jsonMessage = null;
 
+                                String jsonMessage1 = null;
+
                                 try {
                                     jsonMessage = objectMapper.writeValueAsString(cryptoReplenishmentMessage);
-                                } catch (JsonProcessingException jsonProcessingException) {
+                                    jsonMessage1 = objectMapper.writeValueAsString(notificationMessage);
+                                }catch (JsonProcessingException jsonProcessingException){
                                     jsonProcessingException.printStackTrace();
                                 }
 
@@ -538,6 +573,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                         CryptoReplenishmentServiceImpl.class);
 
                                 rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
+
+                                log.info("Sending a replenishment to notification-queue on service {} method: handlePayByLitecoin",
+                                        CryptoReplenishmentServiceImpl.class);
+
+                                rabbitTemplate.convertAndSend("notification-queue", jsonMessage1);
                                 return;
                             }
                         }
@@ -697,6 +737,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                         cryptoReplenishmentHash.getTimestamp()
                                 );
 
+                                NotificationMessage notificationMessage = new NotificationMessage();
+
+                                notificationMessage.setUsername(cryptoReplenishmentHash.getUsername());
+                                notificationMessage.setMessage("You have successfully completed your balance. If the funds have not yet been credited, please wait and reload our site.");
+
                                 log.info("Deleting old payment-hash on service {} method: handlePayByTron",
                                         CryptoReplenishmentServiceImpl.class);
 
@@ -704,9 +749,12 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                                 String jsonMessage = null;
 
+                                String jsonMessage1 = null;
+
                                 try {
                                     jsonMessage = objectMapper.writeValueAsString(cryptoReplenishmentMessage);
-                                } catch (JsonProcessingException jsonProcessingException) {
+                                    jsonMessage1 = objectMapper.writeValueAsString(notificationMessage);
+                                }catch (JsonProcessingException jsonProcessingException){
                                     jsonProcessingException.printStackTrace();
                                 }
 
@@ -714,6 +762,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                         CryptoReplenishmentServiceImpl.class);
 
                                 rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
+
+                                log.info("Sending a replenishment to notification-queue on service {} method: handlePayByTron",
+                                        CryptoReplenishmentServiceImpl.class);
+
+                                rabbitTemplate.convertAndSend("notification-queue", jsonMessage1);
                                 return;
                             }
                         }
@@ -874,6 +927,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     cryptoReplenishmentHash.getTimestamp()
                             );
 
+                            NotificationMessage notificationMessage = new NotificationMessage();
+
+                            notificationMessage.setUsername(cryptoReplenishmentHash.getUsername());
+                            notificationMessage.setMessage("You have successfully completed your balance. If the funds have not yet been credited, please wait and reload our site.");
+
                             log.info("Deleting old payment-hash on service {} method: handlePayByTetherERC20",
                                     CryptoReplenishmentServiceImpl.class);
 
@@ -881,9 +939,12 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                             String jsonMessage = null;
 
+                            String jsonMessage1 = null;
+
                             try {
                                 jsonMessage = objectMapper.writeValueAsString(cryptoReplenishmentMessage);
-                            } catch (JsonProcessingException jsonProcessingException) {
+                                jsonMessage1 = objectMapper.writeValueAsString(notificationMessage);
+                            }catch (JsonProcessingException jsonProcessingException){
                                 jsonProcessingException.printStackTrace();
                             }
 
@@ -891,6 +952,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     CryptoReplenishmentServiceImpl.class);
 
                             rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
+
+                            log.info("Sending a replenishment to notification-queue on service {} method: hhandlePayByTetherERC20",
+                                    CryptoReplenishmentServiceImpl.class);
+
+                            rabbitTemplate.convertAndSend("notification-queue", jsonMessage1);
                             return;
                         }
                     }
@@ -1049,6 +1115,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     cryptoReplenishmentHash.getTimestamp()
                             );
 
+                            NotificationMessage notificationMessage = new NotificationMessage();
+
+                            notificationMessage.setUsername(cryptoReplenishmentHash.getUsername());
+                            notificationMessage.setMessage("You have successfully completed your balance. If the funds have not yet been credited, please wait and reload our site.");
+
                             log.info("Deleting old payment-hash on service {} method: handlePayByPolygon",
                                     CryptoReplenishmentServiceImpl.class);
 
@@ -1056,9 +1127,12 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
 
                             String jsonMessage = null;
 
+                            String jsonMessage1 = null;
+
                             try {
                                 jsonMessage = objectMapper.writeValueAsString(cryptoReplenishmentMessage);
-                            } catch (JsonProcessingException jsonProcessingException) {
+                                jsonMessage1 = objectMapper.writeValueAsString(notificationMessage);
+                            }catch (JsonProcessingException jsonProcessingException){
                                 jsonProcessingException.printStackTrace();
                             }
 
@@ -1066,6 +1140,11 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
                                     CryptoReplenishmentServiceImpl.class);
 
                             rabbitTemplate.convertAndSend("replenishment-queue", jsonMessage);
+
+                            log.info("Sending a replenishment to notification-queue on service {} method: handlePayByPolygon",
+                                    CryptoReplenishmentServiceImpl.class);
+
+                            rabbitTemplate.convertAndSend("notification-queue", jsonMessage1);
                             return;
                         }
                     }
