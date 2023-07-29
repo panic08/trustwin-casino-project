@@ -83,6 +83,7 @@ public class User implements UserDetails {
     @NoArgsConstructor
     public static class Data{
         @Column(name = "authorize_type", nullable = false)
+        @Enumerated(EnumType.STRING)
         private AuthorizeType authorizeType;
         @Column(name = "server_seed", nullable = false)
         private String serverSeed;

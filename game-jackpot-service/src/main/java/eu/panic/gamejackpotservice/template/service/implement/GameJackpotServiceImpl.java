@@ -23,10 +23,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -161,8 +158,6 @@ public class GameJackpotServiceImpl implements GameJackpotService {
 
         gameJackpotBetHashRepository.save(gameJackpotBetHash);
 
-        simpMessagingTemplate.convertAndSend("/bets/topic", gameJackpotBetHashRepository.findAllByRoom(gameJackpotPlayRequest.getRoom()));
-
         switch (gameJackpotPlayRequest.getRoom()){
             case SMALL -> {
                 if (!gameJackpotState.getGameJackpotTypeSmall().getIsPrevStarted()){
@@ -184,6 +179,16 @@ public class GameJackpotServiceImpl implements GameJackpotService {
                     startGameJackpot(gameJackpotPlayRequest.getRoom());
                 }
             }
+        }
+
+        switch (gameJackpotPlayRequest.getRoom()){
+            case SMALL -> simpMessagingTemplate.convertAndSend("/bets/small/topic", gameJackpotBetHashRepository.findAllByRoom(gameJackpotPlayRequest.getRoom()));
+
+            case CLASSIC -> simpMessagingTemplate.convertAndSend("/bets/classic/topic", gameJackpotBetHashRepository.findAllByRoom(gameJackpotPlayRequest.getRoom()));
+
+            case MAJOR -> simpMessagingTemplate.convertAndSend("/bets/major/topic", gameJackpotBetHashRepository.findAllByRoom(gameJackpotPlayRequest.getRoom()));
+
+            case MAX -> simpMessagingTemplate.convertAndSend("/bets/max/topic", gameJackpotBetHashRepository.findAllByRoom(gameJackpotPlayRequest.getRoom()));
         }
     }
 
@@ -333,7 +338,15 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         gameJackpotNewGameEvent.setBet(winner.getBet());
         gameJackpotNewGameEvent.setWin((long) Math.floor(bank - (bank * 0.06)));
 
-        simpMessagingTemplate.convertAndSend("/slider/topic", gameJackpotNewGameEvent);
+        switch (room){
+            case SMALL -> simpMessagingTemplate.convertAndSend("/slider/small/topic", gameJackpotNewGameEvent);
+
+            case CLASSIC -> simpMessagingTemplate.convertAndSend("/slider/classic/topic", gameJackpotNewGameEvent);
+
+            case MAJOR -> simpMessagingTemplate.convertAndSend("/slider/major/topic", gameJackpotNewGameEvent);
+
+            case MAX -> simpMessagingTemplate.convertAndSend("/slider/max/topic", gameJackpotNewGameEvent);
+        }
 
         log.info("Finding and updating user balance by Id on service {} method: startGameJackpot", GameJackpotServiceImpl.class);
 
@@ -345,7 +358,16 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         while (currentSeconds >= 0) {
             gameCrashTimerEvent.setValue(currentSeconds);
 
-            simpMessagingTemplate.convertAndSend("/slider/topic", gameCrashTimerEvent);
+            switch (room){
+                case SMALL -> simpMessagingTemplate.convertAndSend("/slider/small/topic", gameCrashTimerEvent);
+
+                case CLASSIC -> simpMessagingTemplate.convertAndSend("/slider/classic/topic", gameCrashTimerEvent);
+
+                case MAJOR -> simpMessagingTemplate.convertAndSend("/slider/major/topic", gameCrashTimerEvent);
+
+                case MAX -> simpMessagingTemplate.convertAndSend("/slider/max/topic", gameCrashTimerEvent);
+            }
+
 
             currentSeconds -= 1;
 
@@ -404,5 +426,15 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         log.info("Saving an entity game on service {} method: startGameJackpot", GameJackpotServiceImpl.class);
 
         gameRepository.save(game);
+
+        switch (room){
+            case SMALL -> simpMessagingTemplate.convertAndSend("/bets/small/topic", new ArrayList<>());
+
+            case CLASSIC -> simpMessagingTemplate.convertAndSend("/bets/classic/topic", new ArrayList<>());
+
+            case MAJOR -> simpMessagingTemplate.convertAndSend("/bets/major/topic", new ArrayList<>());
+
+            case MAX -> simpMessagingTemplate.convertAndSend("/bets/max/topic", new ArrayList<>());
+        }
     }
 }

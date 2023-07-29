@@ -17,7 +17,6 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/slider");
-        registry.enableSimpleBroker("/bets");
+        registry.enableSimpleBroker("/slider/small", "/slider/classic", "/slider/major", "/slider/max");
     }
 }

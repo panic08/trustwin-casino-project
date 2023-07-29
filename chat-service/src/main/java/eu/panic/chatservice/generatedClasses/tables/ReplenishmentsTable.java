@@ -8,8 +8,11 @@ import eu.panic.chatservice.generatedClasses.Keys;
 import eu.panic.chatservice.generatedClasses.Public;
 import eu.panic.chatservice.generatedClasses.tables.records.ReplenishmentsTableRecord;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
+import org.jooq.Check;
 import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Function6;
@@ -25,6 +28,7 @@ import org.jooq.TableField;
 import org.jooq.TableOptions;
 import org.jooq.UniqueKey;
 import org.jooq.impl.DSL;
+import org.jooq.impl.Internal;
 import org.jooq.impl.SQLDataType;
 import org.jooq.impl.TableImpl;
 
@@ -53,7 +57,22 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     /**
      * The column <code>public.replenishments_table.id</code>.
      */
-    public final TableField<ReplenishmentsTableRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<ReplenishmentsTableRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
+
+    /**
+     * The column <code>public.replenishments_table.amount</code>.
+     */
+    public final TableField<ReplenishmentsTableRecord, Double> AMOUNT = createField(DSL.name("amount"), SQLDataType.DOUBLE.nullable(false), this, "");
+
+    /**
+     * The column <code>public.replenishments_table.payment_method</code>.
+     */
+    public final TableField<ReplenishmentsTableRecord, String> PAYMENT_METHOD = createField(DSL.name("payment_method"), SQLDataType.VARCHAR(255).nullable(false), this, "");
+
+    /**
+     * The column <code>public.replenishments_table.timestamp</code>.
+     */
+    public final TableField<ReplenishmentsTableRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.replenishments_table.username</code>.
@@ -64,21 +83,6 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
      * The column <code>public.replenishments_table.wallet_id</code>.
      */
     public final TableField<ReplenishmentsTableRecord, String> WALLET_ID = createField(DSL.name("wallet_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * The column <code>public.replenishments_table.bet</code>.
-     */
-    public final TableField<ReplenishmentsTableRecord, Double> AMOUNT = createField(DSL.name("bet"), SQLDataType.DOUBLE.nullable(false), this, "");
-
-    /**
-     * The column <code>public.replenishments_table.payment_method</code>.
-     */
-    public final TableField<ReplenishmentsTableRecord, String> PAYMENT_METHOD = createField(DSL.name("payment_method"), SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * The column <code>public.replenishments_table.timestamp</code>.
-     */
-    public final TableField<ReplenishmentsTableRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT, this, "");
 
     private ReplenishmentsTable(Name alias, Table<ReplenishmentsTableRecord> aliased) {
         this(alias, aliased, null);
@@ -121,13 +125,20 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     }
 
     @Override
-    public Identity<ReplenishmentsTableRecord, Integer> getIdentity() {
-        return (Identity<ReplenishmentsTableRecord, Integer>) super.getIdentity();
+    public Identity<ReplenishmentsTableRecord, Long> getIdentity() {
+        return (Identity<ReplenishmentsTableRecord, Long>) super.getIdentity();
     }
 
     @Override
     public UniqueKey<ReplenishmentsTableRecord> getPrimaryKey() {
         return Keys.REPLENISHMENTS_TABLE_PKEY;
+    }
+
+    @Override
+    public List<Check<ReplenishmentsTableRecord>> getChecks() {
+        return Arrays.asList(
+            Internal.createCheck(this, DSL.name("replenishments_table_payment_method_check"), "(((payment_method)::text = ANY ((ARRAY['BTC'::character varying, 'ETH'::character varying, 'LTC'::character varying, 'TRX'::character varying, 'TETHER_ERC20'::character varying, 'MATIC'::character varying])::text[])))", true)
+        );
     }
 
     @Override
@@ -174,14 +185,14 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Integer, String, String, Double, String, Long> fieldsRow() {
+    public Row6<Long, Double, String, Long, String, String> fieldsRow() {
         return (Row6) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function6<? super Integer, ? super String, ? super String, ? super Double, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function6<? super Long, ? super Double, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -189,7 +200,7 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Integer, ? super String, ? super String, ? super Double, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Long, ? super Double, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

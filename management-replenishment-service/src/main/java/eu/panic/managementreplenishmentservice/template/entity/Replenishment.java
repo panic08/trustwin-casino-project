@@ -18,7 +18,7 @@ public class Replenishment {
     private String username;
     @Column(name = "wallet_id", nullable = false)
     private String walletId;
-    @Column(name = "bet", nullable = false)
+    @Column(name = "amount", nullable = false)
     private Double amount;
     @Column(name = "payment_method", nullable = false)
     @Enumerated(EnumType.STRING)

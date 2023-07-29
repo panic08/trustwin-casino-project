@@ -180,7 +180,7 @@ public class GameCrashServiceImpl implements GameCrashService {
         return (List<GameCrashBetHash>) gameCrashBetHashRepository.findAll();
     }
 
-    @Scheduled(fixedRate = 4000)
+    @Scheduled(fixedDelay = 5000)
     private void taskPlayCrash() {
         log.info("Starting method taskPlayCrash on service {} method: taskPlayCrash", GameCrashServiceImpl.class);
 

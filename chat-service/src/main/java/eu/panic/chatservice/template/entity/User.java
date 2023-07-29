@@ -27,11 +27,6 @@ public class User {
     @Column("email")
     private String email;
 
-    private Data data;
-
-    private PersonalData personalData;
-
-    private RefData refData;
 
     @Column("role")
     private Role role;
@@ -44,55 +39,39 @@ public class User {
 
     @Column("is_account_non_locked")
     private Boolean isAccountNonLocked;
+    @Column("nickname")
+    private String nickname;
+
+    @Column("invited")
+    private Long invited;
+    @Column("earned")
+    private Long earned;
+    @Column("level")
+    private Integer level;
+    @Column("ref_link")
+    private String refLink;
+    @Column("invited_by")
+    private String invitedBy;
+
+    @Column("birthday")
+    private String birthday;
+
+    @Column("gender")
+    private Gender gender;
+
+    @Column("authorize_type")
+    private AuthorizeType authorizeType;
+    @Column("server_seed")
+    private String serverSeed;
+    @Column("client_seed")
+    private String clientSeed;
+    @Column("rank")
+    private Rank rank;
 
     @Column("ip_address")
     private String ipAddress;
 
     @Column("registeredAt")
     private Long registeredAt;
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class PersonalData{
-        @Column("nickname")
-        private String nickname;
-
-        @Column("birthday")
-        private String birthday;
-
-        @Column("gender")
-        private Gender gender;
-    }
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Data{
-        @Column("authorize_type")
-        private AuthorizeType authorizeType;
-        @Column("server_seed")
-        private String serverSeed;
-        @Column("client_seed")
-        private String clientSeed;
-        @Column("rank")
-        private Rank rank;
-    }
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class RefData{
-        @Column("invited")
-        private Long invited;
-        @Column("earned")
-        private Long earned;
-        @Column("level")
-        private Integer level;
-        @Column("ref_link")
-        private String refLink;
-        @Column("invited_by")
-        private String invitedBy;
-    }
 
 }

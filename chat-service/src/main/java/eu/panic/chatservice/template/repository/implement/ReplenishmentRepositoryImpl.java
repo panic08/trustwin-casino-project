@@ -15,7 +15,7 @@ public class ReplenishmentRepositoryImpl implements ReplenishmentRepository {
     private final DSLContext dslContext;
 
     @Override
-    public Replenishment findLastById(String username) {
+    public Replenishment findLastByUsername(String username) {
         return dslContext.selectFrom(ReplenishmentsTable.REPLENISHMENTS_TABLE)
                 .where(ReplenishmentsTable.REPLENISHMENTS_TABLE.USERNAME.eq(username))
                 .orderBy(ReplenishmentsTable.REPLENISHMENTS_TABLE.TIMESTAMP.desc())

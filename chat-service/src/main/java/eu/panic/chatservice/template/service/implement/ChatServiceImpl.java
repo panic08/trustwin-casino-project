@@ -61,9 +61,9 @@ public class ChatServiceImpl implements ChatService {
 
         log.info("Finding last entity replenishment by Username on service {} method: sendMessage", ChatServiceImpl.class);
 
-        Replenishment replenishment = replenishmentRepository.findLastById(userDto.getUsername());
+        Replenishment replenishment = replenishmentRepository.findLastByUsername(userDto.getUsername());
 
-        if (replenishment == null || System.currentTimeMillis() - replenishment.getTimestamp() > 14 * 24 * 60 * 1000){
+        if (replenishment == null || (System.currentTimeMillis() - replenishment.getTimestamp() * 1000) > 14 * 24 * 60 * 60 * 1000){
             log.warn("You must have made one deposit in the last 2 weeks in order to post in the chat room on service {} method: sendMessage", ChatServiceImpl.class);
             throw new InvalidCredentialsException("You must have made one deposit in the last 2 weeks in order to post in the chat room");
         }
@@ -83,6 +83,7 @@ public class ChatServiceImpl implements ChatService {
 
         messageMessage.setType(message.getType());
         messageMessage.setUser(userRepository.findByUsername(message.getUsername()));
+
         messageMessage.setMessage(message.getMessage());
         messageMessage.setTimestamp(message.getTimestamp());
 
