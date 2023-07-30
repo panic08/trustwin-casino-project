@@ -1,19 +1,24 @@
 package eu.panic.chatservice.template.entity;
 
 import eu.panic.chatservice.template.enums.MessageType;
+import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.relational.core.mapping.Column;
 
+@Entity
+@Table(name = "messages_table")
 @Data
 public class Message {
-    @Column("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = true)
     private Long id;
-    @Column("type")
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private MessageType type;
-    @Column("username")
+    @Column(name = "username", nullable = false)
     private String username;
-    @Column("message")
+    @Column(name = "message", nullable = false)
     private String message;
-    @Column("timestamp")
+    @Column(name = "timestamp", nullable = false)
     private Long timestamp;
 }

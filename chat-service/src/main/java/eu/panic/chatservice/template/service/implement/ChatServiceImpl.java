@@ -4,13 +4,12 @@ import eu.panic.chatservice.template.dto.UserDto;
 import eu.panic.chatservice.template.entity.Message;
 import eu.panic.chatservice.template.entity.Replenishment;
 import eu.panic.chatservice.template.enums.MessageType;
-import eu.panic.chatservice.template.enums.Rank;
 import eu.panic.chatservice.template.exception.InvalidCredentialsException;
 import eu.panic.chatservice.template.payload.ChatSendMessageRequest;
 import eu.panic.chatservice.template.payload.MessageMessage;
-import eu.panic.chatservice.template.repository.implement.MessageRepositoryImpl;
-import eu.panic.chatservice.template.repository.implement.ReplenishmentRepositoryImpl;
-import eu.panic.chatservice.template.repository.implement.UserRepositoryImpl;
+import eu.panic.chatservice.template.repository.MessageRepository;
+import eu.panic.chatservice.template.repository.ReplenishmentRepository;
+import eu.panic.chatservice.template.repository.UserRepository;
 import eu.panic.chatservice.template.service.ChatService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,19 +23,19 @@ import java.util.List;
 @Service
 @Slf4j
 public class ChatServiceImpl implements ChatService {
-    public ChatServiceImpl(RestTemplate restTemplate, SimpMessagingTemplate simpMessagingTemplate, UserRepositoryImpl userRepository, MessageRepositoryImpl messageRepository, ReplenishmentRepositoryImpl replenishmentRepository) {
+    public ChatServiceImpl(RestTemplate restTemplate, SimpMessagingTemplate simpMessagingTemplate, MessageRepository messageRepository, UserRepository userRepository, ReplenishmentRepository replenishmentRepository) {
         this.restTemplate = restTemplate;
         this.simpMessagingTemplate = simpMessagingTemplate;
-        this.userRepository = userRepository;
         this.messageRepository = messageRepository;
+        this.userRepository = userRepository;
         this.replenishmentRepository = replenishmentRepository;
     }
 
     private final RestTemplate restTemplate;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final UserRepositoryImpl userRepository;
-    private final MessageRepositoryImpl messageRepository;
-    private final ReplenishmentRepositoryImpl replenishmentRepository;
+    private final MessageRepository messageRepository;
+    private final UserRepository userRepository;
+    private final ReplenishmentRepository replenishmentRepository;
     private static final String JWT_URL = "http://localhost:8080/api/auth/getInfoByJwt";
     @Override
     public void sendMessage(String jwtToken, ChatSendMessageRequest chatSendMessageRequest) {
@@ -61,7 +60,7 @@ public class ChatServiceImpl implements ChatService {
 
         log.info("Finding last entity replenishment by Username on service {} method: sendMessage", ChatServiceImpl.class);
 
-        Replenishment replenishment = replenishmentRepository.findLastByUsername(userDto.getUsername());
+        Replenishment replenishment = replenishmentRepository.findTopByUsernameOrderByTimestampDesc(userDto.getUsername());
 
         if (replenishment == null || (System.currentTimeMillis() - replenishment.getTimestamp() * 1000) > 14 * 24 * 60 * 60 * 1000){
             log.warn("You must have made one deposit in the last 2 weeks in order to post in the chat room on service {} method: sendMessage", ChatServiceImpl.class);
@@ -96,7 +95,7 @@ public class ChatServiceImpl implements ChatService {
 
         log.info("Finding last fifty entities message on service {} method: getAllMessages", ChatServiceImpl.class);
 
-        List<Message> messageList = messageRepository.findLastFiftyMessages();
+        List<Message> messageList = messageRepository.findTop50ByOrderByTimestampDesc();
 
         List<MessageMessage> messageMessageList = new ArrayList<>();
 

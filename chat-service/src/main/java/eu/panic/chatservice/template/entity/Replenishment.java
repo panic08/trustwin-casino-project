@@ -1,23 +1,26 @@
 package eu.panic.chatservice.template.entity;
 
 import eu.panic.chatservice.template.enums.PaymentMethod;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.data.relational.core.mapping.Column;
+import jakarta.persistence.*;
+import lombok.Data;
 
-@Getter
-@Setter
+@Entity
+@Table(name = "replenishments_table")
+@Data
 public class Replenishment {
-    @Column("id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    @Column("username")
+    @Column(name = "username", nullable = false)
     private String username;
-    @Column("wallet_id")
+    @Column(name = "wallet_id", nullable = false)
     private String walletId;
-    @Column("amount")
+    @Column(name = "amount", nullable = false)
     private Double amount;
-    @Column("payment_method")
+    @Column(name = "payment_method", nullable = false)
+    @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-    @Column("timestamp")
+    @Column(name = "timestamp", nullable = false)
     private Long timestamp;
 }

@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.relational.core.mapping.Column;
 
 @Getter
 @Setter
@@ -49,15 +48,10 @@ public class UserDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class RefData{
-        @Column("invited")
         private Long invited;
-        @Column("earned")
         private Long earned;
-        @Column("level")
         private Integer level;
-        @Column("ref_link")
         private String refLink;
-        @Column("invited_by")
         private String invitedBy;
     }
 }

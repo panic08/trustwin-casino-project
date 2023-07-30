@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class RandomCharacterGenerator {
     public static String generateRandomCharacters(int length){
-        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW-XYZ012345678=_9";
+        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW-XYZ012345678_9";
         StringBuilder sb = new StringBuilder();
 
         Random random = new Random();

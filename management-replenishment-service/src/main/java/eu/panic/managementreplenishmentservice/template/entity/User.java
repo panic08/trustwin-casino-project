@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "users_table")
 @Getter
 @Setter
-public class User {
+public class User  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -105,5 +105,4 @@ public class User {
         @Column(name = "invited_by", nullable = true)
         private String invitedBy;
     }
-
 }

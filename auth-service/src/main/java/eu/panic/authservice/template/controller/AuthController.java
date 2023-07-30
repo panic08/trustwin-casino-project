@@ -34,10 +34,23 @@ public class AuthController {
     }
 
     @PutMapping("/changePersonalData")
-    private void changePersonalData(
+    private ChangePersonalDataResponse changePersonalData(
             @RequestHeader String jwtToken,
             @RequestBody ChangePersonalDataRequest changePersonalDataRequest
     ){
-        authService.changePersonalData(jwtToken, changePersonalDataRequest);
+        return authService.handleChangePersonalData(jwtToken, changePersonalDataRequest);
+    }
+
+    @PutMapping("/changeServerSeed")
+    private ChangeServerSeedResponse changeServerSeed(@RequestHeader String jwtToken){
+        return authService.handleChangeServerSeed(jwtToken);
+    }
+
+    @PutMapping("/changeClientSeed")
+    private ChangeClientSeedResponse changeClientSeed(
+            @RequestHeader String jwtToken,
+            @RequestBody ChangeClientSeedRequest changeClientSeedRequest
+    ){
+        return authService.handleChangeClientSeed(jwtToken, changeClientSeedRequest.clientSeed());
     }
 }

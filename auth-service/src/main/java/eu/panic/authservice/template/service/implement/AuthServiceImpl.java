@@ -288,27 +288,33 @@ public class AuthServiceImpl implements AuthService {
         log.info("Starting method getInfoByJwt on service {}, method: getInfoByJwt", AuthServiceImpl.class);
 
         if (!jwtUtil.isJwtValid(jwtToken) || jwtUtil.isTokenExpired(jwtToken)){
-            log.warn("Incorrect JWT token on service {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("Incorrect JWT token on service {}, method: getInfoByJwt", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
         return userRepository.findUserByUsername(jwtUtil.extractUsername(jwtToken));
     }
 
+
     @Override
     @Transactional(rollbackOn = Throwable.class)
-    public void changePersonalData(String jwtToken, ChangePersonalDataRequest changePersonalDataRequest) {
+    public ChangePersonalDataResponse handleChangePersonalData(String jwtToken, ChangePersonalDataRequest changePersonalDataRequest) {
         log.info("Starting method changePersonalData on service {}, method: changePersonalData", AuthServiceImpl.class);
 
         if (!jwtUtil.isJwtValid(jwtToken) || jwtUtil.isTokenExpired(jwtToken)){
-            log.warn("Incorrect JWT token on service {}, method: handleSignUp", AuthServiceImpl.class);
+            log.warn("Incorrect JWT token on service {}, method: handleChangePersonalData", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
+
+        User user = userRepository.findUserByUsername(jwtUtil.extractUsername(jwtToken));
+
+        System.out.println(user.getPersonalData().getNickname());
+
 
         log.info("Creating a new record userPersonalData on service {}, method: changePersonalData", AuthServiceImpl.class);
 
         User.PersonalData userPersonalData = new User.PersonalData(
-                changePersonalDataRequest.nickname(),
+                user.getPersonalData().getNickname(),
                 changePersonalDataRequest.birthday(),
                 changePersonalDataRequest.gender()
         );
@@ -316,5 +322,36 @@ public class AuthServiceImpl implements AuthService {
         log.info("Update PersonalData by Username on service {}, method: changePersonalData", AuthServiceImpl.class);
 
         userRepository.updatePersonalDataByUsername(userPersonalData, jwtUtil.extractUsername(jwtToken));
+
+        return new ChangePersonalDataResponse(changePersonalDataRequest.birthday(), changePersonalDataRequest.gender());
+    }
+
+    @Override
+    public ChangeServerSeedResponse handleChangeServerSeed(String jwtToken) {
+        log.info("Starting method handleChangeServerSeed on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+
+        if (!jwtUtil.isJwtValid(jwtToken) || jwtUtil.isTokenExpired(jwtToken)){
+            log.warn("Incorrect JWT token on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+            throw new InvalidCredentialsException("Incorrect JWT token");
+        }
+
+        String seed = SeedGeneratorUtil.generateSeed();
+
+        userRepository.updateServerSeedByUsername(jwtUtil.extractUsername(jwtToken), seed);
+
+        return new ChangeServerSeedResponse(seed);
+    }
+    @Override
+    public ChangeClientSeedResponse handleChangeClientSeed(String jwtToken, String clientSeed) {
+        log.info("Starting method changePersonalData on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+
+        if (!jwtUtil.isJwtValid(jwtToken) || jwtUtil.isTokenExpired(jwtToken)){
+            log.warn("Incorrect JWT token on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+            throw new InvalidCredentialsException("Incorrect JWT token");
+        }
+
+        userRepository.updateClientSeedByUsername(jwtUtil.extractUsername(jwtToken), clientSeed);
+
+        return new ChangeClientSeedResponse(clientSeed);
     }
 }
