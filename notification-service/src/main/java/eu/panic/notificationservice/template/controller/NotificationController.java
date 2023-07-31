@@ -14,12 +14,12 @@ public class NotificationController {
     }
 
     private final NotificationServiceImpl notificationService;
-    @GetMapping("/getLastFive")
+    @GetMapping("/getAll")
     private List<Notification> getLastNotifications(@RequestHeader String jwtToken){
         return notificationService.getLastNotifications(jwtToken);
     }
 
-    @PostMapping("/watch")
+    @PostMapping("/watchAll")
     private List<Notification> watchAllNotifications(@RequestHeader String jwtToken){
         return notificationService.watchAllNotifications(jwtToken);
     }

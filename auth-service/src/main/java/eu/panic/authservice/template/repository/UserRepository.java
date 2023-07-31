@@ -11,8 +11,12 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findUserByUsername(String username);
     User findUserByRefData_RefLink(String refLinK);
-    void updateClientSeedByUsername(String username, String clientSeed);
-    void updateServerSeedByUsername(String username, String serverSeed);
+    @Modifying
+    @Query("UPDATE User u SET u.data.clientSeed = :clientSeed WHERE u.username = :username")
+    void updateClientSeedByUsername(@Param("clientSeed") String clientSeed, @Param("username") String username);
+    @Modifying
+    @Query("UPDATE User u SET u.data.serverSeed = :serverSeed WHERE u.username = :username")
+    void updateServerSeedByUsername(@Param("serverSeed") String serverSeed, @Param("username") String username);
     User findUserByEmail(String email);
     boolean existsByIpAddress(String ipAddress);
     @Modifying

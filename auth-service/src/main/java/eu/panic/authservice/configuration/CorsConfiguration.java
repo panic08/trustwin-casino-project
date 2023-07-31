@@ -30,6 +30,16 @@ public class CorsConfiguration implements WebMvcConfigurer {
                 .allowedOrigins("PUT")
                 .allowedHeaders("*");
 
+        registry.addMapping("/api/auth/changeServerSeed")
+                .allowedOrigins("http://localhost:80")
+                .allowedOrigins("PUT")
+                .allowedHeaders("*");
+
+        registry.addMapping("/api/auth/changeClientSeed")
+                .allowedOrigins("http://localhost:80")
+                .allowedOrigins("PUT")
+                .allowedHeaders("*");
+
         registry.addMapping("/api/auth/getInfoByJwt")
                 .allowedOrigins("*")
                 .allowedMethods("POST")

@@ -327,6 +327,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    @Transactional(rollbackOn = Throwable.class)
     public ChangeServerSeedResponse handleChangeServerSeed(String jwtToken) {
         log.info("Starting method handleChangeServerSeed on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
 
@@ -337,20 +338,35 @@ public class AuthServiceImpl implements AuthService {
 
         String seed = SeedGeneratorUtil.generateSeed();
 
-        userRepository.updateServerSeedByUsername(jwtUtil.extractUsername(jwtToken), seed);
+        log.info("Finding entity user by Username on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+
+        User user = userRepository.findUserByUsername(jwtUtil.extractUsername(jwtToken));
+
+        user.getData().setServerSeed(seed);
+
+        log.info("Saving an entity user on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+
+        userRepository.save(user);
 
         return new ChangeServerSeedResponse(seed);
     }
     @Override
+    @Transactional(rollbackOn = Throwable.class)
     public ChangeClientSeedResponse handleChangeClientSeed(String jwtToken, String clientSeed) {
-        log.info("Starting method changePersonalData on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+        log.info("Starting method handleChangeClientSeed on service {}, method:handleChangeClientSeed", AuthServiceImpl.class);
 
         if (!jwtUtil.isJwtValid(jwtToken) || jwtUtil.isTokenExpired(jwtToken)){
-            log.warn("Incorrect JWT token on service {}, method: handleChangeServerSeed", AuthServiceImpl.class);
+            log.warn("Incorrect JWT token on service {}, method: handleChangeClientSeed", AuthServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
-        userRepository.updateClientSeedByUsername(jwtUtil.extractUsername(jwtToken), clientSeed);
+        log.info("Finding entity user by Username on service {}, method: handleChangeClientSeed", AuthServiceImpl.class);
+
+        User user = userRepository.findUserByUsername(jwtUtil.extractUsername(jwtToken));
+
+        user.getData().setClientSeed(clientSeed);
+
+        log.info("Saving an entity user on service {}, method: handleChangeClientSeed", AuthServiceImpl.class);
 
         return new ChangeClientSeedResponse(clientSeed);
     }

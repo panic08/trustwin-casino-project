@@ -19,7 +19,7 @@ public class ChatController {
     private List<MessageMessage> getAllMessages(){
         return chatService.getAllMessages();
     }
-    @PostMapping("/sendMessage")
+    @PostMapping("/send")
     private void sendMessage(
             @RequestHeader String jwtToken,
             @RequestBody ChatSendMessageRequest chatSendMessageRequest

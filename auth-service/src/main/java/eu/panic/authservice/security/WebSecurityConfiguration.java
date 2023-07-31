@@ -22,6 +22,8 @@ public class WebSecurityConfiguration extends org.springframework.security.confi
                         .requestMatchers(HttpMethod.POST, "/api/auth/signInByGoogle").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/getInfoByJwt").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/api/auth/changePersonalData").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/auth/changeServerSeed").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/api/auth/changeClientSeed").permitAll()
                         .requestMatchers("/oauth2/**").permitAll()
                         .anyRequest().authenticated()
                 )
