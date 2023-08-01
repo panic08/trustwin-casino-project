@@ -41,7 +41,7 @@ public class GameJackpotServiceImpl implements GameJackpotService {
     private final UserRepositoryImpl userRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
     private final GameRepositoryImpl gameRepository;
-    private static GameJackpotState gameJackpotState = new GameJackpotState();
+    private static final GameJackpotState gameJackpotState = new GameJackpotState();
     private static final String JWT_URL = "http://localhost:8080/api/auth/getInfoByJwt";
     @Override
     public void handlePlayJackpot(String jwtToken, GameJackpotPlayRequest gameJackpotPlayRequest) {
@@ -161,22 +161,30 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         switch (gameJackpotPlayRequest.getRoom()){
             case SMALL -> {
                 if (!gameJackpotState.getGameJackpotTypeSmall().getIsPrevStarted()){
-                    startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    new Thread(() -> {
+                        startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    }).start();
                 }
             }
             case CLASSIC -> {
                 if (!gameJackpotState.getGameJackpotTypeClassic().getIsPrevStarted()){
-                    startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    new Thread(() -> {
+                        startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    }).start();
                 }
             }
             case MAJOR -> {
                 if (!gameJackpotState.getGameJackpotTypeMajor().getIsPrevStarted()){
-                    startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    new Thread(() -> {
+                        startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    }).start();
                 }
             }
             case MAX -> {
                 if (!gameJackpotState.getGameJackpotTypeMax().getIsPrevStarted()){
-                    startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    new Thread(() -> {
+                        startGameJackpot(gameJackpotPlayRequest.getRoom());
+                    }).start();
                 }
             }
         }
@@ -226,23 +234,27 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         log.info("Finding hashes by Room on service {} method: startGameJackpot", GameJackpotServiceImpl.class);
 
         List<GameJackpotBetHash> gameJackpotBetHashList = gameJackpotBetHashRepository.findAllByRoom(room);
-        Set<String> uniqueUsernames = new HashSet<>();
+        Set<String> usernames = new HashSet<>();
 
-        for (GameJackpotBetHash gameJackpotBetHash : gameJackpotBetHashList){
-            String username = gameJackpotBetHash.getUser().getUsername();
-            if (uniqueUsernames.contains(username)){
-                switch (room){
-                    case SMALL -> gameJackpotState.getGameJackpotTypeSmall().setIsPrevStarted(true);
+        for (GameJackpotBetHash betHash : gameJackpotBetHashList){
+            usernames.add(betHash.getUser().getUsername());
+        }
 
-                    case CLASSIC -> gameJackpotState.getGameJackpotTypeClassic().setIsPrevStarted(true);
+        for (GameJackpotBetHash betHash : gameJackpotBetHashList) {
+            for (String username : usernames){
+                if (!betHash.getUser().getUsername().equals(username)){
+                    switch (room){
+                        case SMALL -> gameJackpotState.getGameJackpotTypeSmall().setIsPrevStarted(true);
 
-                    case MAJOR -> gameJackpotState.getGameJackpotTypeMajor().setIsPrevStarted(true);
+                        case CLASSIC -> gameJackpotState.getGameJackpotTypeClassic().setIsPrevStarted(true);
 
-                    case MAX -> gameJackpotState.getGameJackpotTypeMax().setIsPrevStarted(true);
+                        case MAJOR -> gameJackpotState.getGameJackpotTypeMajor().setIsPrevStarted(true);
+
+                        case MAX -> gameJackpotState.getGameJackpotTypeMax().setIsPrevStarted(true);
+                    }
+                    break;
                 }
             }
-
-            uniqueUsernames.add(username);
         }
 
         switch (room){
@@ -278,7 +290,15 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         while (currentSeconds >= 0) {
             gameCrashTimerEvent.setValue(currentSeconds);
 
-            simpMessagingTemplate.convertAndSend("/slider/topic", gameCrashTimerEvent);
+            switch (room){
+                case SMALL -> simpMessagingTemplate.convertAndSend("/slider/small/topic", gameCrashTimerEvent);
+
+                case CLASSIC -> simpMessagingTemplate.convertAndSend("/slider/classic/topic", gameCrashTimerEvent);
+
+                case MAJOR -> simpMessagingTemplate.convertAndSend("/slider/major/topic", gameCrashTimerEvent);
+
+                case MAX -> simpMessagingTemplate.convertAndSend("/slider/max/topic", gameCrashTimerEvent);
+            }
 
             currentSeconds -= 1;
 
@@ -426,6 +446,8 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         log.info("Saving an entity game on service {} method: startGameJackpot", GameJackpotServiceImpl.class);
 
         gameRepository.save(game);
+
+        gameJackpotBetHashRepository.deleteAll(gameJackpotBetHashRepository.findAllByRoom(room));
 
         switch (room){
             case SMALL -> simpMessagingTemplate.convertAndSend("/bets/small/topic", new ArrayList<>());

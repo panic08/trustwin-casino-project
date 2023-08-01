@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface GameJackpotBetHashRepository extends CrudRepository<GameJackpotBetHash, String> {
     List<GameJackpotBetHash> findAllByRoom(JackpotRoom room);
+    void deleteAllByRoom(JackpotRoom room);
 }
