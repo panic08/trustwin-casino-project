@@ -51,7 +51,8 @@ public class GameOvergoServiceImpl implements GameOvergoService {
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
-        if (gameOvergoPlayRequest.getBet() < 1 || gameOvergoPlayRequest.getChance() < 0.001 || gameOvergoPlayRequest.getChance() > 95.098){
+        if (gameOvergoPlayRequest.getBet() < 1 || gameOvergoPlayRequest.getBet() > 100000 || gameOvergoPlayRequest.getChance() < 0.001
+                || gameOvergoPlayRequest.getChance() > 95.098){
             log.warn("Incorrect Overgo data on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect Overgo data");
         }
@@ -61,6 +62,12 @@ public class GameOvergoServiceImpl implements GameOvergoService {
         if (userDto.getBalance() < gameOvergoPlayRequest.getBet()){
             log.warn("You do not have enough money for this bet on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
             throw new InsufficientFundsException("You do not have enough money for this bet");
+        }
+
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service {}" +
+                    "method: handlePlayOvergo", GameOvergoServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
         }
 
         log.info("Updating entity balance on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
@@ -90,6 +97,7 @@ public class GameOvergoServiceImpl implements GameOvergoService {
 
         GameOvergoPlayResponse gameOvergoPlayResponse = new GameOvergoPlayResponse();
 
+        gameOvergoPlayResponse.setBet(gameOvergoPlayRequest.getBet());
         gameOvergoPlayResponse.setMaxCoefficient(overgoNumber);
 
         if (coefficient < overgoNumber){
@@ -112,7 +120,7 @@ public class GameOvergoServiceImpl implements GameOvergoService {
 
         gameRepository.save(game);
 
-        log.info("Creating jsonMessage message for game-queue on service {} method: handlePlayDice", GameOvergoServiceImpl.class);
+        log.info("Creating jsonMessage message for game-queue on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
 
         GameMessage gameMessage = new GameMessage();
 

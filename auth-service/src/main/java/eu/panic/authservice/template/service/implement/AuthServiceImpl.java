@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
                 ||
                 userRepository.findUserByEmail(signUpRequest.email()) != null){
             log.warn("An account with this username or email already exists on service {}, method: handleSignUp", AuthServiceImpl.class);
-            throw new InvalidCredentialsException("An account with this username or email already exists. Think of another one.");
+            throw new InvalidCredentialsException("An account with this username or email already exists. Think of another one");
         }
 
         log.info("Creating a new entity user on service {}, method: handleSignUp", AuthServiceImpl.class);

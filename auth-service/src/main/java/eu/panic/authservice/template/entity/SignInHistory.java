@@ -34,23 +34,6 @@ public class SignInHistory {
 
         @Embedded
         private BrowserInfo browserInfo;
-
-        @Embedded
-        private DeviceInfo deviceInfo;
-    }
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Getter
-    @Setter
-    public static class DeviceInfo {
-        @Column(name = "device_type", nullable = false)
-        private String deviceType;
-
-        @Column(name = "device_name", nullable = false)
-        private String deviceName;
-
-        @Column(name = "operating_system", nullable = false)
-        private String operatingSystem;
     }
 
     @NoArgsConstructor

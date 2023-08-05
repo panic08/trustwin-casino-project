@@ -8,6 +8,7 @@ import lombok.Setter;
 @Setter
 public class GameOvergoPlayResponse {
     private GameState gameState;
+    private long bet;
     private long win;
     private double maxCoefficient;
 }

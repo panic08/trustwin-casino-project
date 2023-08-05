@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MessageMessage {
+    private Long id;
     private MessageType type;
     private User user;
     private String message;

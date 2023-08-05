@@ -67,6 +67,12 @@ public class ChatServiceImpl implements ChatService {
             throw new InvalidCredentialsException("You must have made one deposit in the last 2 weeks in order to post in the chat room");
         }
 
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service on service {}" +
+                    "method: sendMessage", ChatServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
+        }
+
         Message message = new Message();
 
         message.setType(MessageType.MESSAGE);
@@ -102,6 +108,7 @@ public class ChatServiceImpl implements ChatService {
         for (Message message : messageList){
             MessageMessage messageMessage = new MessageMessage();
 
+            messageMessage.setId(message.getId());
             messageMessage.setType(message.getType());
             messageMessage.setUser(userRepository.findByUsername(message.getUsername()));
             messageMessage.setMessage(message.getMessage());

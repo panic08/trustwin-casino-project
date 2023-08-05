@@ -14,6 +14,10 @@ public class CorsConfiguration implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:80")
                 .allowedMethods("GET")
                 .allowedHeaders("*");
+        registry.addMapping("/api/replenishment/getAll")
+                .allowedOrigins("http://localhost:80")
+                .allowedMethods("GET")
+                .allowedHeaders("*");
         registry.addMapping("/api/replenishment/payByBtc")
                 .allowedOrigins("http://localhost:80")
                 .allowedMethods("POST")

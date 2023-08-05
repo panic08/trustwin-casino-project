@@ -47,10 +47,10 @@ public class WithdrawalServiceImpl implements WithdrawalService {
                 }
             }
             case ETH -> {
-                if (createWithdrawalRequest.getAmount() < 300){
-                    log.warn("The minimum bet for withdrawal in ETH is 300 coins on service {} method: createWithdrawal",
+                if (createWithdrawalRequest.getAmount() < 200){
+                    log.warn("The minimum bet for withdrawal in ETH is 200 coins on service {} method: createWithdrawal",
                             WithdrawalServiceImpl.class);
-                    throw new InvalidCredentialsException("The minimum bet for withdrawal in ETH is 300 coins");
+                    throw new InvalidCredentialsException("The minimum bet for withdrawal in ETH is 200 coins");
                 }
             }
             case LTC -> {
@@ -68,10 +68,17 @@ public class WithdrawalServiceImpl implements WithdrawalService {
                 restTemplate.postForEntity(JWT_URL + "?jwtToken=" + jwtToken, null, UserDto.class);
 
         if (userDtoResponseEntity.getStatusCode().isError()){
+            log.warn("Incorrect JWT token on service {} method: createWithdrawal", WithdrawalServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
         UserDto userDto = userDtoResponseEntity.getBody();
+
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service {} " +
+                    "method: createWithdrawal", WithdrawalServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
+        }
 
         if (userDto.getBalance() < createWithdrawalRequest.getAmount()){
             log.warn("Insufficient funds to withdraw on service {} method: createWithdrawal", WithdrawalServiceImpl.class);
@@ -148,13 +155,13 @@ public class WithdrawalServiceImpl implements WithdrawalService {
         Withdrawal withdrawal = withdrawalRepository.findById(cancelWithdrawalByIdRequest.getId()).orElseThrow();
 
         if (!withdrawal.getUsername().equals(userDto.getUsername())){
-            log.warn("You cannot override this withdrawal on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
-            throw new InvalidCredentialsException("You cannot override this withdrawal");
+            log.warn("You cannot cancel this withdrawal on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
+            throw new InvalidCredentialsException("You cannot cancel this withdrawal");
         }
 
         if (withdrawal.getStatus().equals(WithdrawalStatus.CANCELED)){
-            log.warn("This withdrawal has already been reversed on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
-            throw new InvalidCredentialsException("This withdrawal has already been reversed");
+            log.warn("This withdrawal has already been canceled on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
+            throw new InvalidCredentialsException("This withdrawal has already been canceled");
         }
 
         withdrawal.setStatus(WithdrawalStatus.CANCELED);

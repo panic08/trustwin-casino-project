@@ -1,11 +1,14 @@
 package eu.panic.replenishmentservice.template.controller;
 
+import eu.panic.replenishmentservice.template.entity.Replenishment;
 import eu.panic.replenishmentservice.template.enums.CryptoCurrency;
 import eu.panic.replenishmentservice.template.hash.CryptoReplenishmentHash;
 import eu.panic.replenishmentservice.template.payload.CryptoReplenishmentRequest;
 import eu.panic.replenishmentservice.template.payload.CryptoReplenishmentResponse;
 import eu.panic.replenishmentservice.template.service.implement.CryptoReplenishmentServiceImpl;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/replenishment/crypto")
@@ -22,6 +25,12 @@ public class CryptoReplenishmentController {
     ){
         return cryptoReplenishmentService.getCryptoPayment(jwtToken, currency);
     }
+
+    @GetMapping("/getAll")
+    private List<Replenishment> getReplenishmentsByUsername(@RequestHeader String jwtToken){
+        return cryptoReplenishmentService.getReplenishmentsByUsername(jwtToken);
+    }
+
     @PostMapping("/payByBtc")
     private CryptoReplenishmentResponse handlePayByBitcoin(
             @RequestHeader String jwtToken,

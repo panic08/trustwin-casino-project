@@ -51,7 +51,8 @@ public class GameDiceServiceImpl implements GameDiceService {
             throw new InvalidCredentialsException("Incorrect JWT token");
         }
 
-        if (gameDicePlayRequest.getChance() < 1 || gameDicePlayRequest.getChance() > 95 || gameDicePlayRequest.getBet() < 1){
+        if (gameDicePlayRequest.getChance() < 1 || gameDicePlayRequest.getChance() > 95 || gameDicePlayRequest.getBet() < 1
+                || gameDicePlayRequest.getBet() > 100000){
             log.warn("Incorrect Dice data on service {} method: handlePlayDice", GameDiceServiceImpl.class);
             throw new InvalidCredentialsException("Incorrect Dice data");
         }
@@ -61,6 +62,12 @@ public class GameDiceServiceImpl implements GameDiceService {
         if (userDto.getBalance() < gameDicePlayRequest.getBet()){
             log.warn("You do not have enough money for this bet on service {} method: handlePlayDice", GameDiceServiceImpl.class);
             throw new InsufficientFundsException("You do not have enough money for this bet");
+        }
+
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service {}" +
+                    "method: handlePlayDice", GameDiceServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
         }
 
         log.info("Updating entity balance on service {} method: handlePlayDice", GameDiceServiceImpl.class);
@@ -90,6 +97,8 @@ public class GameDiceServiceImpl implements GameDiceService {
         log.info("Creating response for this method on service {} method: handlePlayDice", GameDiceServiceImpl.class);
 
         GameDicePlayResponse gameDicePlayResponse = new GameDicePlayResponse();
+
+        gameDicePlayResponse.setBet(gameDicePlayRequest.getBet());
 
         if (diceNumber > (100 - gameDicePlayRequest.getChance())){
             game.setCoefficient(coefficient);

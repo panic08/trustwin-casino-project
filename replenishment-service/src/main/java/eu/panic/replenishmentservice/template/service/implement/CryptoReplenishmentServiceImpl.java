@@ -3,6 +3,7 @@ package eu.panic.replenishmentservice.template.service.implement;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import eu.panic.replenishmentservice.template.dto.UserDto;
+import eu.panic.replenishmentservice.template.entity.Replenishment;
 import eu.panic.replenishmentservice.template.enums.CryptoCurrency;
 import eu.panic.replenishmentservice.template.exception.InsufficientTopUpAmountException;
 import eu.panic.replenishmentservice.template.exception.InvalidCredentialsException;
@@ -15,6 +16,7 @@ import eu.panic.replenishmentservice.template.payload.NotificationMessage;
 import eu.panic.replenishmentservice.template.payload.crypto.*;
 import eu.panic.replenishmentservice.template.rabbit.CryptoRabbit;
 import eu.panic.replenishmentservice.template.repository.ReplenishmentHashRepository;
+import eu.panic.replenishmentservice.template.repository.ReplenishmentRepository;
 import eu.panic.replenishmentservice.template.service.CryptoReplenishmentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -31,11 +33,12 @@ import java.util.UUID;
 @Service
 @Slf4j
 public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentService {
-    public CryptoReplenishmentServiceImpl(RabbitTemplate rabbitTemplate, CryptoRabbit cryptoRabbit, RestTemplate restTemplate, ReplenishmentHashRepository replenishmentHashRepository) {
+    public CryptoReplenishmentServiceImpl(RabbitTemplate rabbitTemplate, CryptoRabbit cryptoRabbit, RestTemplate restTemplate, ReplenishmentHashRepository replenishmentHashRepository, ReplenishmentRepository replenishmentRepository) {
         this.rabbitTemplate = rabbitTemplate;
         this.cryptoRabbit = cryptoRabbit;
         this.restTemplate = restTemplate;
         this.replenishmentHashRepository = replenishmentHashRepository;
+        this.replenishmentRepository = replenishmentRepository;
     }
 
     private final RabbitTemplate rabbitTemplate;
@@ -44,6 +47,7 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
     private final ObjectMapper objectMapper = new ObjectMapper();
     private static final String JWT_URL = "http://localhost:8080/api/auth/getInfoByJwt";
     private final ReplenishmentHashRepository replenishmentHashRepository;
+    private final ReplenishmentRepository replenishmentRepository;
     @Override
     public CryptoReplenishmentResponse handlePayByBitcoin(String jwtToken, CryptoReplenishmentRequest cryptoReplenishmentRequest) {
         log.info("Starting method handlePayByBitcoin on service {} method: handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
@@ -51,14 +55,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.2){
-                    log.warn("Minimal bet for BTC payment is 1.2 USD on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for BTC payment is 1.2 USD");
+                    log.warn("Minimum bet for BTC payment is 1.2 USD on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for BTC payment is 1.2 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal bet for BTC payment is 1.1 EUR on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for BTC payment is 1.1 EUR");
+                    log.warn("Minimum bet for BTC payment is 1.1 EUR on service {} method handlePayByBitcoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for BTC payment is 1.1 EUR");
                 }
             }
         }
@@ -236,14 +240,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 2.8){
-                    log.warn("Minimal bet for BTC payment is 2.8 USD on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for ETH payment is 2.8 USD");
+                    log.warn("Minimum bet for BTC payment is 2.8 USD on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for ETH payment is 2.8 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 2.6){
-                    log.warn("Minimal bet for BTC payment is 2.6 EUR on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for ETH payment is 2.6 EUR");
+                    log.warn("Minimum bet for BTC payment is 2.6 EUR on service {} method handlePayByEthereum", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for ETH payment is 2.6 EUR");
                 }
             }
         }
@@ -424,14 +428,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 2.2){
-                    log.warn("Minimal bet for LTC payment is 2.2 USD on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for LTC payment is 2.2 USD");
+                    log.warn("Minimum bet for LTC payment is 2.2 USD on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for LTC payment is 2.2 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 2){
-                    log.warn("Minimal bet for LTC payment is 2 EUR on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for LTC payment is 2 EUR");
+                    log.warn("Minimum bet for LTC payment is 2 EUR on service {} method handlePayByLitecoin", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for LTC payment is 2 EUR");
                 }
             }
         }
@@ -614,14 +618,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal bet for TRX payment is 1.1 USD on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for TRX payment is 1.1 USD");
+                    log.warn("Minimum bet for TRX payment is 1.1 USD on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for TRX payment is 1.1 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1){
-                    log.warn("Minimal bet for TRX payment is 1 EUR on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for TRX payment is 1 EUR");
+                    log.warn("Minimum bet for TRX payment is 1 EUR on service {} method handlePayByTron", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for TRX payment is 1 EUR");
                 }
             }
         }
@@ -803,14 +807,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.2){
-                    log.warn("Minimal bet for TETHER-ERC20 payment is 1.2 USD on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for TETHER-ERC20 payment is 1.2 USD");
+                    log.warn("Minimum bet for TETHER-ERC20 payment is 1.2 USD on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for TETHER-ERC20 payment is 1.2 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal bet for TETHER-ERC20 payment is 1.1 EUR on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for TETHER-ERC20 payment is 1.1 EUR");
+                    log.warn("Minimum bet for TETHER-ERC20 payment is 1.1 EUR on service {} method handlePayByTetherERC20", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for TETHER-ERC20 payment is 1.1 EUR");
                 }
             }
         }
@@ -992,14 +996,14 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         switch (cryptoReplenishmentRequest.currency()) {
             case USD -> {
                 if (cryptoReplenishmentRequest.amount() < 1.1){
-                    log.warn("Minimal bet for MATIC payment is 1.1 USD on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for MATIC payment is 1.1 USD");
+                    log.warn("Minimum bet for MATIC payment is 1.1 USD on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for MATIC payment is 1.1 USD");
                 }
             }
             case EUR -> {
                 if (cryptoReplenishmentRequest.amount() < 1){
-                    log.warn("Minimal bet for MATIC payment is 1 EUR on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
-                    throw new InsufficientTopUpAmountException("Minimal bet for MATIC payment is 1 EUR");
+                    log.warn("Minimum bet for MATIC payment is 1 EUR on service {} method handlePayByPolygon", CryptoReplenishmentServiceImpl.class);
+                    throw new InsufficientTopUpAmountException("Minimum bet for MATIC payment is 1 EUR");
                 }
             }
         }
@@ -1195,5 +1199,24 @@ public class CryptoReplenishmentServiceImpl implements CryptoReplenishmentServic
         return cryptoReplenishmentHashes.stream()
                 .filter(p -> p.getCurrency().equals(currency))
                 .findFirst().orElse(null);
+    }
+
+    @Override
+    public List<Replenishment> getReplenishmentsByUsername(String jwtToken) {
+        log.info("Starting getReplenishmentsByUsername method on service {} method: getReplenishmentsByUsername", CryptoReplenishmentServiceImpl.class);
+
+        log.info("Receiving entity User by JWT on service {} method: getReplenishmentsByUsername", CryptoReplenishmentServiceImpl.class);
+
+        ResponseEntity<UserDto> userDtoResponseEntity =
+                restTemplate.postForEntity(JWT_URL + "?jwtToken=" + jwtToken, null, UserDto.class);
+
+        if (userDtoResponseEntity.getStatusCode().isError()) {
+            log.warn("Incorrect JWT token on service {} method getReplenishmentsByUsername", CryptoReplenishmentServiceImpl.class);
+            throw new InvalidCredentialsException("Incorrect JWT token");
+        }
+
+        UserDto userDto = userDtoResponseEntity.getBody();
+
+        return replenishmentRepository.findAllByUsername(userDto.getUsername());
     }
 }
