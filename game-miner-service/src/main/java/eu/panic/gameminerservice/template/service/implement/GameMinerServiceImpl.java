@@ -64,6 +64,12 @@ public class GameMinerServiceImpl implements GameMinerService {
 
         UserDto userDto = userDtoResponseEntity.getBody();
 
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service {}" +
+                    "method: handleCreatingMinerSession", GameMinerServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
+        }
+
         log.info("Checking for hash existence on service {} method: handleCreatingMinerSession", GameMinerServiceImpl.class);
 
         if (minerSessionHashRepository.findMinerSessionHashByUsername(userDto.getUsername()) != null){

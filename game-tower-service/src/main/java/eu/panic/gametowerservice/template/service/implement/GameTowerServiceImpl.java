@@ -68,6 +68,12 @@ public class GameTowerServiceImpl implements GameTowerService {
             throw new InsufficientFundsException("You do not have enough money for this bet");
         }
 
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service {}" +
+                    "method: createTowerSession", GameTowerServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
+        }
+
         GameTowerSessionHash gameTowerSessionHash =
                 gameTowerSessionHashRepository.findGameTowerSessionHashByUsername(userDto.getUsername());
 

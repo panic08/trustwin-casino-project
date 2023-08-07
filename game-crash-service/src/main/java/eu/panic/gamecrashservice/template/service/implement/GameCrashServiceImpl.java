@@ -71,6 +71,12 @@ public class GameCrashServiceImpl implements GameCrashService {
             throw new InsufficientFundsException("You do not have enough money for this bet");
         }
 
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service {}" +
+                    "method: handlePlayCrash", GameCrashServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
+        }
+
         if (gameCrashBetHashRepository.findCrashBetHashByUsername(userDto.getUsername()) != null){
             log.warn("You have already placed your bet, wait for the game to end on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
             throw new InvalidCredentialsException("You have already placed your bet, wait for the game to end");
