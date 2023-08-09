@@ -36,14 +36,14 @@ public class ReplenishmentsTableRecord extends UpdatableRecordImpl<Replenishment
     }
 
     /**
-     * Setter for <code>public.replenishments_table.bet</code>.
+     * Setter for <code>public.replenishments_table.amount</code>.
      */
     public void setAmount(Double value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>public.replenishments_table.bet</code>.
+     * Getter for <code>public.replenishments_table.amount</code>.
      */
     public Double getAmount() {
         return (Double) get(1);

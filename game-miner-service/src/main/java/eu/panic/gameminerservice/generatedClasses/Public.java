@@ -6,6 +6,8 @@ package eu.panic.gameminerservice.generatedClasses;
 
 import eu.panic.gameminerservice.generatedClasses.tables.FlywaySchemaHistory;
 import eu.panic.gameminerservice.generatedClasses.tables.GamesTable;
+import eu.panic.gameminerservice.generatedClasses.tables.MessagesTable;
+import eu.panic.gameminerservice.generatedClasses.tables.NotificationsTable;
 import eu.panic.gameminerservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gameminerservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gameminerservice.generatedClasses.tables.UsersTable;
@@ -41,6 +43,16 @@ public class Public extends SchemaImpl {
      * The table <code>public.games_table</code>.
      */
     public final GamesTable GAMES_TABLE = GamesTable.GAMES_TABLE;
+
+    /**
+     * The table <code>public.messages_table</code>.
+     */
+    public final MessagesTable MESSAGES_TABLE = MessagesTable.MESSAGES_TABLE;
+
+    /**
+     * The table <code>public.notifications_table</code>.
+     */
+    public final NotificationsTable NOTIFICATIONS_TABLE = NotificationsTable.NOTIFICATIONS_TABLE;
 
     /**
      * The table <code>public.replenishments_table</code>.
@@ -80,6 +92,8 @@ public class Public extends SchemaImpl {
         return Arrays.asList(
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             GamesTable.GAMES_TABLE,
+            MessagesTable.MESSAGES_TABLE,
+            NotificationsTable.NOTIFICATIONS_TABLE,
             ReplenishmentsTable.REPLENISHMENTS_TABLE,
             SignInHistoryTable.SIGN_IN_HISTORY_TABLE,
             UsersTable.USERS_TABLE,

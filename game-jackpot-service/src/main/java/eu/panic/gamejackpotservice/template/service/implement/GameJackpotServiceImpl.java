@@ -87,37 +87,37 @@ public class GameJackpotServiceImpl implements GameJackpotService {
         }
 
         if (userDto.getBalance() < gameJackpotPlayRequest.getBet()){
-            log.warn("You do not have enough money for this bet on service {} method: handlePlayJackpot", GameJackpotServiceImpl.class);
-            throw new InsufficientFundsException("You do not have enough money for this bet");
+            log.warn("You do not have enough money for this win on service {} method: handlePlayJackpot", GameJackpotServiceImpl.class);
+            throw new InsufficientFundsException("You do not have enough money for this win");
         }
 
         switch (gameJackpotPlayRequest.getRoom()){
             case SMALL -> {
                 if (gameJackpotState.getGameJackpotTypeSmall().getIsStarted()){
-                    log.warn("You cannot place a bet as the game has already started on service {} method: handlePlayJackpot",
+                    log.warn("You cannot place a win as the game has already started on service {} method: handlePlayJackpot",
                             GameJackpotServiceImpl.class);
-                    throw new InvalidCredentialsException("You cannot place a bet as the game has already started");
+                    throw new InvalidCredentialsException("You cannot place a win as the game has already started");
                 }
             }
             case CLASSIC -> {
                 if (gameJackpotState.getGameJackpotTypeClassic().getIsStarted()){
-                    log.warn("You cannot place a bet as the game has already started on service {} method: handlePlayJackpot",
+                    log.warn("You cannot place a win as the game has already started on service {} method: handlePlayJackpot",
                             GameJackpotServiceImpl.class);
-                    throw new InvalidCredentialsException("You cannot place a bet as the game has already started");
+                    throw new InvalidCredentialsException("You cannot place a win as the game has already started");
                 }
             }
             case MAJOR -> {
                 if (gameJackpotState.getGameJackpotTypeMajor().getIsStarted()){
-                    log.warn("You cannot place a bet as the game has already started on service {} method: handlePlayJackpot",
+                    log.warn("You cannot place a win as the game has already started on service {} method: handlePlayJackpot",
                             GameJackpotServiceImpl.class);
-                    throw new InvalidCredentialsException("You cannot place a bet as the game has already started");
+                    throw new InvalidCredentialsException("You cannot place a win as the game has already started");
                 }
             }
             case MAX -> {
                 if (gameJackpotState.getGameJackpotTypeMax().getIsStarted()){
-                    log.warn("You cannot place a bet as the game has already started on service {} method: handlePlayJackpot",
+                    log.warn("You cannot place a win as the game has already started on service {} method: handlePlayJackpot",
                             GameJackpotServiceImpl.class);
-                    throw new InvalidCredentialsException("You cannot place a bet as the game has already started");
+                    throw new InvalidCredentialsException("You cannot place a win as the game has already started");
                 }
             }
         }

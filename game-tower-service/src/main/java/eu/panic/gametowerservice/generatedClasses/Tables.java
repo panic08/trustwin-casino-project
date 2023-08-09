@@ -7,6 +7,7 @@ package eu.panic.gametowerservice.generatedClasses;
 import eu.panic.gametowerservice.generatedClasses.tables.FlywaySchemaHistory;
 import eu.panic.gametowerservice.generatedClasses.tables.GamesTable;
 import eu.panic.gametowerservice.generatedClasses.tables.MessagesTable;
+import eu.panic.gametowerservice.generatedClasses.tables.NotificationsTable;
 import eu.panic.gametowerservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gametowerservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gametowerservice.generatedClasses.tables.UsersTable;
@@ -33,6 +34,11 @@ public class Tables {
      * The table <code>public.messages_table</code>.
      */
     public static final MessagesTable MESSAGES_TABLE = MessagesTable.MESSAGES_TABLE;
+
+    /**
+     * The table <code>public.notifications_table</code>.
+     */
+    public static final NotificationsTable NOTIFICATIONS_TABLE = NotificationsTable.NOTIFICATIONS_TABLE;
 
     /**
      * The table <code>public.replenishments_table</code>.

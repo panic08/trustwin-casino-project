@@ -7,6 +7,7 @@ package eu.panic.gametowerservice.generatedClasses;
 import eu.panic.gametowerservice.generatedClasses.tables.FlywaySchemaHistory;
 import eu.panic.gametowerservice.generatedClasses.tables.GamesTable;
 import eu.panic.gametowerservice.generatedClasses.tables.MessagesTable;
+import eu.panic.gametowerservice.generatedClasses.tables.NotificationsTable;
 import eu.panic.gametowerservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gametowerservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gametowerservice.generatedClasses.tables.UsersTable;
@@ -49,6 +50,11 @@ public class Public extends SchemaImpl {
     public final MessagesTable MESSAGES_TABLE = MessagesTable.MESSAGES_TABLE;
 
     /**
+     * The table <code>public.notifications_table</code>.
+     */
+    public final NotificationsTable NOTIFICATIONS_TABLE = NotificationsTable.NOTIFICATIONS_TABLE;
+
+    /**
      * The table <code>public.replenishments_table</code>.
      */
     public final ReplenishmentsTable REPLENISHMENTS_TABLE = ReplenishmentsTable.REPLENISHMENTS_TABLE;
@@ -87,6 +93,7 @@ public class Public extends SchemaImpl {
             FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY,
             GamesTable.GAMES_TABLE,
             MessagesTable.MESSAGES_TABLE,
+            NotificationsTable.NOTIFICATIONS_TABLE,
             ReplenishmentsTable.REPLENISHMENTS_TABLE,
             SignInHistoryTable.SIGN_IN_HISTORY_TABLE,
             UsersTable.USERS_TABLE,

@@ -6,12 +6,16 @@ package eu.panic.gameminerservice.generatedClasses;
 
 import eu.panic.gameminerservice.generatedClasses.tables.FlywaySchemaHistory;
 import eu.panic.gameminerservice.generatedClasses.tables.GamesTable;
+import eu.panic.gameminerservice.generatedClasses.tables.MessagesTable;
+import eu.panic.gameminerservice.generatedClasses.tables.NotificationsTable;
 import eu.panic.gameminerservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gameminerservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gameminerservice.generatedClasses.tables.UsersTable;
 import eu.panic.gameminerservice.generatedClasses.tables.WithdrawalsTable;
 import eu.panic.gameminerservice.generatedClasses.tables.records.FlywaySchemaHistoryRecord;
 import eu.panic.gameminerservice.generatedClasses.tables.records.GamesTableRecord;
+import eu.panic.gameminerservice.generatedClasses.tables.records.MessagesTableRecord;
+import eu.panic.gameminerservice.generatedClasses.tables.records.NotificationsTableRecord;
 import eu.panic.gameminerservice.generatedClasses.tables.records.ReplenishmentsTableRecord;
 import eu.panic.gameminerservice.generatedClasses.tables.records.SignInHistoryTableRecord;
 import eu.panic.gameminerservice.generatedClasses.tables.records.UsersTableRecord;
@@ -36,6 +40,8 @@ public class Keys {
 
     public static final UniqueKey<FlywaySchemaHistoryRecord> FLYWAY_SCHEMA_HISTORY_PK = Internal.createUniqueKey(FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY, DSL.name("flyway_schema_history_pk"), new TableField[] { FlywaySchemaHistory.FLYWAY_SCHEMA_HISTORY.INSTALLED_RANK }, true);
     public static final UniqueKey<GamesTableRecord> GAMES_TABLE_PKEY = Internal.createUniqueKey(GamesTable.GAMES_TABLE, DSL.name("games_table_pkey"), new TableField[] { GamesTable.GAMES_TABLE.ID }, true);
+    public static final UniqueKey<MessagesTableRecord> MESSAGES_TABLE_PKEY = Internal.createUniqueKey(MessagesTable.MESSAGES_TABLE, DSL.name("messages_table_pkey"), new TableField[] { MessagesTable.MESSAGES_TABLE.ID }, true);
+    public static final UniqueKey<NotificationsTableRecord> NOTIFICATIONS_TABLE_PKEY = Internal.createUniqueKey(NotificationsTable.NOTIFICATIONS_TABLE, DSL.name("notifications_table_pkey"), new TableField[] { NotificationsTable.NOTIFICATIONS_TABLE.ID }, true);
     public static final UniqueKey<ReplenishmentsTableRecord> REPLENISHMENTS_TABLE_PKEY = Internal.createUniqueKey(ReplenishmentsTable.REPLENISHMENTS_TABLE, DSL.name("replenishments_table_pkey"), new TableField[] { ReplenishmentsTable.REPLENISHMENTS_TABLE.ID }, true);
     public static final UniqueKey<SignInHistoryTableRecord> SIGN_IN_HISTORY_TABLE_PKEY = Internal.createUniqueKey(SignInHistoryTable.SIGN_IN_HISTORY_TABLE, DSL.name("sign_in_history_table_pkey"), new TableField[] { SignInHistoryTable.SIGN_IN_HISTORY_TABLE.ID }, true);
     public static final UniqueKey<UsersTableRecord> USERS_TABLE_PKEY = Internal.createUniqueKey(UsersTable.USERS_TABLE, DSL.name("users_table_pkey"), new TableField[] { UsersTable.USERS_TABLE.ID }, true);

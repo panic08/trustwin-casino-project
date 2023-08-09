@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class GameMinerPlayResponse {
     private GameState gameState;
-    private long amount;
+    private long win;
     private double coefficient;
     private List<Integer> picked;
     private List<Integer> mines;

@@ -38,14 +38,14 @@ public class WithdrawalsTableRecord extends UpdatableRecordImpl<WithdrawalsTable
     /**
      * Setter for <code>public.withdrawals_table.bet</code>.
      */
-    public void setAmount(Long value) {
+    public void setBet(Long value) {
         set(1, value);
     }
 
     /**
      * Getter for <code>public.withdrawals_table.bet</code>.
      */
-    public Long getAmount() {
+    public Long getBet() {
         return (Long) get(1);
     }
 
@@ -149,7 +149,7 @@ public class WithdrawalsTableRecord extends UpdatableRecordImpl<WithdrawalsTable
 
     @Override
     public Field<Long> field2() {
-        return WithdrawalsTable.WITHDRAWALS_TABLE.AMOUNT;
+        return WithdrawalsTable.WITHDRAWALS_TABLE.BET;
     }
 
     @Override
@@ -184,7 +184,7 @@ public class WithdrawalsTableRecord extends UpdatableRecordImpl<WithdrawalsTable
 
     @Override
     public Long component2() {
-        return getAmount();
+        return getBet();
     }
 
     @Override
@@ -219,7 +219,7 @@ public class WithdrawalsTableRecord extends UpdatableRecordImpl<WithdrawalsTable
 
     @Override
     public Long value2() {
-        return getAmount();
+        return getBet();
     }
 
     @Override
@@ -255,7 +255,7 @@ public class WithdrawalsTableRecord extends UpdatableRecordImpl<WithdrawalsTable
 
     @Override
     public WithdrawalsTableRecord value2(Long value) {
-        setAmount(value);
+        setBet(value);
         return this;
     }
 
@@ -315,11 +315,11 @@ public class WithdrawalsTableRecord extends UpdatableRecordImpl<WithdrawalsTable
     /**
      * Create a detached, initialised WithdrawalsTableRecord
      */
-    public WithdrawalsTableRecord(Long id, Long amount, String method, String status, Long timestamp, String username, String walletId) {
+    public WithdrawalsTableRecord(Long id, Long bet, String method, String status, Long timestamp, String username, String walletId) {
         super(WithdrawalsTable.WITHDRAWALS_TABLE);
 
         setId(id);
-        setAmount(amount);
+        setBet(bet);
         setMethod(method);
         setStatus(status);
         setTimestamp(timestamp);

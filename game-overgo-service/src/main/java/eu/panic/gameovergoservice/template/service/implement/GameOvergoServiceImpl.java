@@ -60,8 +60,8 @@ public class GameOvergoServiceImpl implements GameOvergoService {
         UserDto userDto = userDtoResponseEntity.getBody();
 
         if (userDto.getBalance() < gameOvergoPlayRequest.getBet()){
-            log.warn("You do not have enough money for this bet on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
-            throw new InsufficientFundsException("You do not have enough money for this bet");
+            log.warn("You do not have enough money for this win on service {} method: handlePlayOvergo", GameOvergoServiceImpl.class);
+            throw new InsufficientFundsException("You do not have enough money for this win");
         }
 
         if (!userDto.getIsAccountNonLocked()){

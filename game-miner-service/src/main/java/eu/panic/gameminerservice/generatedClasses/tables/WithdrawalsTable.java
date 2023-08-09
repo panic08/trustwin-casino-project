@@ -62,7 +62,7 @@ public class WithdrawalsTable extends TableImpl<WithdrawalsTableRecord> {
     /**
      * The column <code>public.withdrawals_table.bet</code>.
      */
-    public final TableField<WithdrawalsTableRecord, Long> AMOUNT = createField(DSL.name("bet"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<WithdrawalsTableRecord, Long> BET = createField(DSL.name("bet"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.withdrawals_table.method</code>.

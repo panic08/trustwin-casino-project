@@ -14,7 +14,7 @@ public class Replenishment {
     private String username;
     @Column("wallet_id")
     private String walletId;
-    @Column("amount")
+    @Column("win")
     private Double amount;
     @Column("payment_method")
     private PaymentMethod paymentMethod;

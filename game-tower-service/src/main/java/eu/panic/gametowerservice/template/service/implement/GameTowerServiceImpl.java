@@ -64,8 +64,8 @@ public class GameTowerServiceImpl implements GameTowerService {
         }
 
         if (userDto.getBalance() < gameTowerCreateRequest.getBet()){
-            log.warn("You do not have enough money for this bet on service {} method: createTowerSession", GameTowerServiceImpl.class);
-            throw new InsufficientFundsException("You do not have enough money for this bet");
+            log.warn("You do not have enough money for this win on service {} method: createTowerSession", GameTowerServiceImpl.class);
+            throw new InsufficientFundsException("You do not have enough money for this win");
         }
 
         if (!userDto.getIsAccountNonLocked()){
@@ -383,7 +383,7 @@ public class GameTowerServiceImpl implements GameTowerService {
         if (gameTowerSessionHash == null){
             log.warn("Game session is out of date, start a new one on service {} method: getCurrentTowerGame",
                     GameTowerServiceImpl.class);
-            throw new InvalidCredentialsException("Game session is out of date, start a new one");
+            return null;
         }
 
         log.info("Creating response for this method on service {} method: getCurrentTowerGame", GameTowerServiceImpl.class);

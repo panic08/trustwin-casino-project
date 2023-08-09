@@ -60,9 +60,9 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     public final TableField<ReplenishmentsTableRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>public.replenishments_table.bet</code>.
+     * The column <code>public.replenishments_table.amount</code>.
      */
-    public final TableField<ReplenishmentsTableRecord, Double> AMOUNT = createField(DSL.name("bet"), SQLDataType.DOUBLE.nullable(false), this, "");
+    public final TableField<ReplenishmentsTableRecord, Double> AMOUNT = createField(DSL.name("amount"), SQLDataType.DOUBLE.nullable(false), this, "");
 
     /**
      * The column <code>public.replenishments_table.payment_method</code>.
@@ -72,7 +72,7 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     /**
      * The column <code>public.replenishments_table.timestamp</code>.
      */
-    public final TableField<ReplenishmentsTableRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT, this, "");
+    public final TableField<ReplenishmentsTableRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.replenishments_table.username</code>.

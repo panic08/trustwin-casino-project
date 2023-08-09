@@ -14,7 +14,7 @@ public class Game {
     private String username;
     @Column("nickname")
     private String nickname;
-    @Column("bet")
+    @Column("win")
     private Long bet;
     @Column("win")
     private Long win;

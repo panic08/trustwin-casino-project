@@ -60,9 +60,9 @@ public class WithdrawalsTable extends TableImpl<WithdrawalsTableRecord> {
     public final TableField<WithdrawalsTableRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
-     * The column <code>public.withdrawals_table.amount</code>.
+     * The column <code>public.withdrawals_table.win</code>.
      */
-    public final TableField<WithdrawalsTableRecord, Long> AMOUNT = createField(DSL.name("amount"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<WithdrawalsTableRecord, Long> AMOUNT = createField(DSL.name("win"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.withdrawals_table.method</code>.

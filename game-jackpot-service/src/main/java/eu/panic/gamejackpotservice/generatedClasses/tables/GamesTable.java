@@ -71,9 +71,9 @@ public class GamesTable extends TableImpl<GamesTableRecord> {
     public final TableField<GamesTableRecord, String> NICKNAME = createField(DSL.name("nickname"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>public.games_table.bet</code>.
+     * The column <code>public.games_table.win</code>.
      */
-    public final TableField<GamesTableRecord, Long> BET = createField(DSL.name("bet"), SQLDataType.BIGINT.nullable(false), this, "");
+    public final TableField<GamesTableRecord, Long> BET = createField(DSL.name("win"), SQLDataType.BIGINT.nullable(false), this, "");
 
     /**
      * The column <code>public.games_table.win</code>.

@@ -78,8 +78,8 @@ public class GameMinerServiceImpl implements GameMinerService {
         }
 
         if (userDto.getBalance() < gameMinerCreateRequest.getBet()){
-            log.warn("You do not have enough money for this bet on service {} method: handleCreatingMinerSession", GameMinerServiceImpl.class);
-            throw new InsufficientFundsException("You do not have enough money for this bet");
+            log.warn("You do not have enough money for this win on service {} method: handleCreatingMinerSession", GameMinerServiceImpl.class);
+            throw new InsufficientFundsException("You do not have enough money for this win");
         }
 
         GameSessionUtil gameSession = new GameSessionUtil(userDto.getData().getServerSeed(), userDto.getData().getClientSeed());
@@ -176,7 +176,7 @@ public class GameMinerServiceImpl implements GameMinerService {
                 if (key.equals(key1)){
                     gameMinerPlayResponse.setGameState(GameState.LOSE);
                     gameMinerPlayResponse.setMines(gameMinerSessionHash.getMines());
-                    gameMinerPlayResponse.setAmount(0);
+                    gameMinerPlayResponse.setWin(0);
                     gameMinerPlayResponse.setCoefficient(0.0);
 
                     Game game = new Game();
@@ -234,7 +234,7 @@ public class GameMinerServiceImpl implements GameMinerService {
         if (gameMinerSessionHash.getNotPicked().isEmpty()){
             gameMinerPlayResponse.setGameState(GameState.WIN);
             gameMinerPlayResponse.setCoefficient(gameMinerSessionHash.getCoefficient());
-            gameMinerPlayResponse.setAmount(gameMinerSessionHash.getWin());
+            gameMinerPlayResponse.setWin(gameMinerSessionHash.getWin());
 
             Game game = new Game();
 
@@ -284,7 +284,7 @@ public class GameMinerServiceImpl implements GameMinerService {
 
         gameMinerPlayResponse.setGameState(GameState.CONTINUE);
         gameMinerPlayResponse.setCoefficient(Math.floor((gameMinerSessionHash.getCoefficient() - (gameMinerSessionHash.getCoefficient() * 0.03)) * 1e2) / 1e2);
-        gameMinerPlayResponse.setAmount(gameMinerSessionHash.getWin());
+        gameMinerPlayResponse.setWin(gameMinerSessionHash.getWin());
 
         log.info("Saving a minerSessionHash hash on service {} method: handlePlayMiner", GameMinerServiceImpl.class);
 
@@ -371,7 +371,7 @@ public class GameMinerServiceImpl implements GameMinerService {
         gameMinerPlayResponse.setPicked(gameMinerSessionHash.getPicked());
         gameMinerPlayResponse.setMines(gameMinerSessionHash.getMines());
         gameMinerPlayResponse.setCoefficient(Math.floor((gameMinerSessionHash.getCoefficient() - (gameMinerSessionHash.getCoefficient() * 0.03)) * 1e2) / 1e2);
-        gameMinerPlayResponse.setAmount(gameMinerSessionHash.getWin());
+        gameMinerPlayResponse.setWin(gameMinerSessionHash.getWin());
 
         return gameMinerPlayResponse;
     }
@@ -398,7 +398,7 @@ public class GameMinerServiceImpl implements GameMinerService {
 
         if (gameMinerSessionHash == null) {
             log.warn("Game session is out of date, start a new one on service {} method: getCurrentMinerGame", GameMinerServiceImpl.class);
-            throw new InvalidCredentialsException("Game session is out of date, start a new one");
+            return null;
         }
 
         gameMinerSessionHash.setCoefficient(Math.floor((gameMinerSessionHash.getCoefficient() - (gameMinerSessionHash.getCoefficient() * 0.03)) * 1e2) / 1e2);

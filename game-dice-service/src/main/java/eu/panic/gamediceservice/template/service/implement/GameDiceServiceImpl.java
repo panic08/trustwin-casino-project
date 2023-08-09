@@ -60,8 +60,8 @@ public class GameDiceServiceImpl implements GameDiceService {
         UserDto userDto = userDtoResponseEntity.getBody();
 
         if (userDto.getBalance() < gameDicePlayRequest.getBet()){
-            log.warn("You do not have enough money for this bet on service {} method: handlePlayDice", GameDiceServiceImpl.class);
-            throw new InsufficientFundsException("You do not have enough money for this bet");
+            log.warn("You do not have enough money for this win on service {} method: handlePlayDice", GameDiceServiceImpl.class);
+            throw new InsufficientFundsException("You do not have enough money for this win");
         }
 
         if (!userDto.getIsAccountNonLocked()){

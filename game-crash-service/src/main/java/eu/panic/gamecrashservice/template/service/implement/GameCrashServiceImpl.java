@@ -67,8 +67,8 @@ public class GameCrashServiceImpl implements GameCrashService {
         UserDto userDto = userDtoResponseEntity.getBody();
 
         if (userDto.getBalance() < gameCrashPlayRequest.getBet()){
-            log.warn("You do not have enough money for this bet on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
-            throw new InsufficientFundsException("You do not have enough money for this bet");
+            log.warn("You do not have enough money for this win on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
+            throw new InsufficientFundsException("You do not have enough money for this win");
         }
 
         if (!userDto.getIsAccountNonLocked()){
@@ -78,13 +78,13 @@ public class GameCrashServiceImpl implements GameCrashService {
         }
 
         if (gameCrashBetHashRepository.findCrashBetHashByUsername(userDto.getUsername()) != null){
-            log.warn("You have already placed your bet, wait for the game to end on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
-            throw new InvalidCredentialsException("You have already placed your bet, wait for the game to end");
+            log.warn("You have already placed your win, wait for the game to end on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
+            throw new InvalidCredentialsException("You have already placed your win, wait for the game to end");
         }
 
         if (gameCrashState.getIsStarted()){
-            log.warn("You cannot place a bet as the game has already started on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
-            throw new InvalidCredentialsException("You cannot place a bet as the game has already started");
+            log.warn("You cannot place a win as the game has already started on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
+            throw new InvalidCredentialsException("You cannot place a win as the game has already started");
         }
 
         log.info("Updating user balance by Id on service {} method: handlePlayCrash", GameCrashServiceImpl.class);
@@ -131,13 +131,13 @@ public class GameCrashServiceImpl implements GameCrashService {
         GameCrashBetHash gameCrashBetHash = gameCrashBetHashRepository.findCrashBetHashByUsername(userDto.getUsername());
 
         if (gameCrashBetHash == null){
-            log.warn("You can't withdraw your bet since you didn't place it on service {} method: handleBetTaking", GameCrashServiceImpl.class);
-            throw new InvalidCredentialsException("You can't withdraw your bet since you didn't place it");
+            log.warn("You can't withdraw your win since you didn't place it on service {} method: handleBetTaking", GameCrashServiceImpl.class);
+            throw new InvalidCredentialsException("You can't withdraw your win since you didn't place it");
         }
 
         if (gameCrashBetHash.getIsTaken()){
-            log.warn("You've already taken that bet on service {} method: handleBetTaking", GameCrashServiceImpl.class);
-            throw new InvalidCredentialsException("You've already taken that bet");
+            log.warn("You've already taken that win on service {} method: handleBetTaking", GameCrashServiceImpl.class);
+            throw new InvalidCredentialsException("You've already taken that win");
         }
 
         long win = (long) (gameCrashBetHash.getBet() * coefficient);

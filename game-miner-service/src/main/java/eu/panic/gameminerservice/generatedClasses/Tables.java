@@ -6,6 +6,8 @@ package eu.panic.gameminerservice.generatedClasses;
 
 import eu.panic.gameminerservice.generatedClasses.tables.FlywaySchemaHistory;
 import eu.panic.gameminerservice.generatedClasses.tables.GamesTable;
+import eu.panic.gameminerservice.generatedClasses.tables.MessagesTable;
+import eu.panic.gameminerservice.generatedClasses.tables.NotificationsTable;
 import eu.panic.gameminerservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gameminerservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gameminerservice.generatedClasses.tables.UsersTable;
@@ -27,6 +29,16 @@ public class Tables {
      * The table <code>public.games_table</code>.
      */
     public static final GamesTable GAMES_TABLE = GamesTable.GAMES_TABLE;
+
+    /**
+     * The table <code>public.messages_table</code>.
+     */
+    public static final MessagesTable MESSAGES_TABLE = MessagesTable.MESSAGES_TABLE;
+
+    /**
+     * The table <code>public.notifications_table</code>.
+     */
+    public static final NotificationsTable NOTIFICATIONS_TABLE = NotificationsTable.NOTIFICATIONS_TABLE;
 
     /**
      * The table <code>public.replenishments_table</code>.
