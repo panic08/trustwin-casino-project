@@ -15,7 +15,7 @@ import lombok.Setter;
 @Table(name = "users_table")
 @Getter
 @Setter
-public class User  {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -58,11 +58,12 @@ public class User  {
 
     @Column(name = "registeredAt", nullable = false)
     private Long registeredAt;
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class PersonalData{
+    public static class PersonalData {
         @Column(name = "nickname", nullable = true)
         private String nickname;
 
@@ -73,11 +74,12 @@ public class User  {
         @Enumerated(EnumType.STRING)
         private Gender gender;
     }
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class Data{
+    public static class Data {
         @Column(name = "authorize_type", nullable = false)
         @Enumerated(EnumType.STRING)
         private AuthorizeType authorizeType;
@@ -89,11 +91,12 @@ public class User  {
         @Enumerated(EnumType.STRING)
         private Rank rank;
     }
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RefData{
+    public static class RefData {
         @Column(name = "invited", nullable = false)
         private Long invited;
         @Column(name = "earned", nullable = false)

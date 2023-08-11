@@ -12,12 +12,12 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function6;
+import org.jooq.Function7;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row6;
+import org.jooq.Row7;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -53,7 +53,7 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     /**
      * The column <code>public.replenishments_table.id</code>.
      */
-    public final TableField<ReplenishmentsTableRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<ReplenishmentsTableRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.replenishments_table.username</code>.
@@ -66,9 +66,9 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     public final TableField<ReplenishmentsTableRecord, String> WALLET_ID = createField(DSL.name("wallet_id"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>public.replenishments_table.win</code>.
+     * The column <code>public.replenishments_table.amount</code>.
      */
-    public final TableField<ReplenishmentsTableRecord, Double> AMOUNT = createField(DSL.name("win"), SQLDataType.DOUBLE.nullable(false), this, "");
+    public final TableField<ReplenishmentsTableRecord, Double> AMOUNT = createField(DSL.name("amount"), SQLDataType.DOUBLE.nullable(false), this, "");
 
     /**
      * The column <code>public.replenishments_table.payment_method</code>.
@@ -79,6 +79,11 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
      * The column <code>public.replenishments_table.timestamp</code>.
      */
     public final TableField<ReplenishmentsTableRecord, Long> TIMESTAMP = createField(DSL.name("timestamp"), SQLDataType.BIGINT, this, "");
+
+    /**
+     * The column <code>public.replenishments_table.win</code>.
+     */
+    public final TableField<ReplenishmentsTableRecord, Double> WIN = createField(DSL.name("win"), SQLDataType.DOUBLE.nullable(false), this, "");
 
     private ReplenishmentsTable(Name alias, Table<ReplenishmentsTableRecord> aliased) {
         this(alias, aliased, null);
@@ -121,8 +126,8 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     }
 
     @Override
-    public Identity<ReplenishmentsTableRecord, Integer> getIdentity() {
-        return (Identity<ReplenishmentsTableRecord, Integer>) super.getIdentity();
+    public Identity<ReplenishmentsTableRecord, Long> getIdentity() {
+        return (Identity<ReplenishmentsTableRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -170,18 +175,18 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row6 type methods
+    // Row7 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row6<Integer, String, String, Double, String, Long> fieldsRow() {
-        return (Row6) super.fieldsRow();
+    public Row7<Long, String, String, Double, String, Long, Double> fieldsRow() {
+        return (Row7) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function6<? super Integer, ? super String, ? super String, ? super Double, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function7<? super Long, ? super String, ? super String, ? super Double, ? super String, ? super Long, ? super Double, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -189,7 +194,7 @@ public class ReplenishmentsTable extends TableImpl<ReplenishmentsTableRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Integer, ? super String, ? super String, ? super Double, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function7<? super Long, ? super String, ? super String, ? super Double, ? super String, ? super Long, ? super Double, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

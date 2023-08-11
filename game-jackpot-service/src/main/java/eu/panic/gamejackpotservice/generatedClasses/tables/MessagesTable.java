@@ -53,7 +53,7 @@ public class MessagesTable extends TableImpl<MessagesTableRecord> {
     /**
      * The column <code>public.messages_table.id</code>.
      */
-    public final TableField<MessagesTableRecord, Integer> ID = createField(DSL.name("id"), SQLDataType.INTEGER.nullable(false).identity(true), this, "");
+    public final TableField<MessagesTableRecord, Long> ID = createField(DSL.name("id"), SQLDataType.BIGINT.nullable(false).identity(true), this, "");
 
     /**
      * The column <code>public.messages_table.type</code>.
@@ -114,8 +114,8 @@ public class MessagesTable extends TableImpl<MessagesTableRecord> {
     }
 
     @Override
-    public Identity<MessagesTableRecord, Integer> getIdentity() {
-        return (Identity<MessagesTableRecord, Integer>) super.getIdentity();
+    public Identity<MessagesTableRecord, Long> getIdentity() {
+        return (Identity<MessagesTableRecord, Long>) super.getIdentity();
     }
 
     @Override
@@ -167,14 +167,14 @@ public class MessagesTable extends TableImpl<MessagesTableRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row5<Integer, String, String, String, Long> fieldsRow() {
+    public Row5<Long, String, String, String, Long> fieldsRow() {
         return (Row5) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function5<? super Integer, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function5<? super Long, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -182,7 +182,7 @@ public class MessagesTable extends TableImpl<MessagesTableRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super Integer, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function5<? super Long, ? super String, ? super String, ? super String, ? super Long, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

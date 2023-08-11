@@ -99,7 +99,7 @@ public class GameCrashServiceImpl implements GameCrashService {
         gameCrashBetHash.setUser(userDto);
         gameCrashBetHash.setBet(gameCrashPlayRequest.getBet());
         gameCrashBetHash.setIsTaken(false);
-        gameCrashBetHash.setWin(null);
+        gameCrashBetHash.setWin(0L);
         gameCrashBetHash.setCoefficient(1.00);
         gameCrashBetHash.setTimestamp(System.currentTimeMillis());
 
@@ -135,12 +135,19 @@ public class GameCrashServiceImpl implements GameCrashService {
             throw new InvalidCredentialsException("You can't withdraw your win since you didn't place it");
         }
 
+        if (!gameCrashState.getIsStarted()){
+            log.warn("You can't withdraw your bet as the game hasn't started yet on service {} method: handleBetTaking",
+                    GameCrashServiceImpl.class);
+            throw new InvalidCredentialsException("You can't withdraw your bet as the game hasn't started yet");
+        }
+
         if (gameCrashBetHash.getIsTaken()){
             log.warn("You've already taken that win on service {} method: handleBetTaking", GameCrashServiceImpl.class);
             throw new InvalidCredentialsException("You've already taken that win");
         }
 
-        long win = (long) (gameCrashBetHash.getBet() * coefficient);
+        long preWin = (long) (gameCrashBetHash.getBet() * coefficient);
+        long win = (long)  (preWin - (preWin * 0.03));
 
         gameCrashBetHash.setWin(win);
         gameCrashBetHash.setIsTaken(true);
@@ -255,6 +262,16 @@ public class GameCrashServiceImpl implements GameCrashService {
             }
         }
 
+        List<GameCrashBetHash> gameCrashBetHashList = (List<GameCrashBetHash>) gameCrashBetHashRepository.findAll();
+
+        long allBets = 0;
+        long allWins = 0;
+
+        for (GameCrashBetHash gameCrashBetHash : gameCrashBetHashList){
+            allBets += gameCrashBetHash.getBet();
+            allWins += gameCrashBetHash.getWin();
+        }
+
         log.info("Deleting all crashBetHashes on service {} method: taskPlayCrash", GameCrashServiceImpl.class);
 
         gameCrashBetHashRepository.deleteAll();
@@ -264,8 +281,8 @@ public class GameCrashServiceImpl implements GameCrashService {
         game.setGameType(GameType.CRASH);
         game.setNickname("null");
         game.setUsername("null");
-        game.setBet(0L);
-        game.setWin(0L);
+        game.setBet(allBets);
+        game.setWin(allWins);
         game.setCoefficient(gameCrashState.getCoefficient());
         game.setClientSeed("000000000000000000223b7a2298fb1c6c75fb0efc28a4c56853ff4112ec6bc9");
         game.setServerSeed("00000000000000000011b3e92e82e0f9939093dccc3614647686c20e5ebe3aa6");

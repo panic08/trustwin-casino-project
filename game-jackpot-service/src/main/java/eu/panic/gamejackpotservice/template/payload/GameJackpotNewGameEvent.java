@@ -10,6 +10,7 @@ import lombok.Setter;
 @Setter
 public class GameJackpotNewGameEvent {
     private GameEventType type;
+    private long happyTicket;
     private UserDto winner;
     private JackpotRoom room;
     private long bet;

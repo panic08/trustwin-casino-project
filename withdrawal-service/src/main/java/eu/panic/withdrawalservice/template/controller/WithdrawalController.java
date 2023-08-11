@@ -30,10 +30,10 @@ public class WithdrawalController {
         return withdrawalService.createWithdrawal(jwtToken, createWithdrawalRequest);
     }
     @PutMapping("/cancel")
-    private CancelWithdrawalByIdResponse cancelWithdrawal(
+    private void cancelWithdrawal(
             @RequestHeader String jwtToken,
             @RequestBody CancelWithdrawalByIdRequest cancelWithdrawalByIdRequest
             ){
-        return withdrawalService.cancelWithdrawalById(jwtToken, cancelWithdrawalByIdRequest);
+        withdrawalService.cancelWithdrawalById(jwtToken, cancelWithdrawalByIdRequest);
     }
 }

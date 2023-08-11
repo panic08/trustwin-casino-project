@@ -136,7 +136,7 @@ public class WithdrawalServiceImpl implements WithdrawalService {
 
     @Override
     @Transactional(rollbackOn = Throwable.class)
-    public CancelWithdrawalByIdResponse cancelWithdrawalById(String jwtToken, CancelWithdrawalByIdRequest cancelWithdrawalByIdRequest) {
+    public void cancelWithdrawalById(String jwtToken, CancelWithdrawalByIdRequest cancelWithdrawalByIdRequest) {
         log.info("Starting method cancelWithdrawalById on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
 
         log.info("Receiving entity user by jwtToken on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
@@ -173,17 +173,5 @@ public class WithdrawalServiceImpl implements WithdrawalService {
         log.info("Updating balance of entity user on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
 
         userRepository.updateBalanceByUsername(userDto.getBalance() + withdrawal.getAmount(), userDto.getUsername());
-
-        log.info("Creating response for this method on service {} method: cancelWithdrawalById", WithdrawalServiceImpl.class);
-
-        CancelWithdrawalByIdResponse cancelWithdrawalByIdResponse = new CancelWithdrawalByIdResponse();
-
-        cancelWithdrawalByIdResponse.setStatus(WithdrawalStatus.CANCELED);
-        cancelWithdrawalByIdResponse.setMethod(withdrawal.getMethod());
-        cancelWithdrawalByIdResponse.setWalletId(withdrawal.getWalletId());
-        cancelWithdrawalByIdResponse.setAmount(withdrawal.getAmount());
-        cancelWithdrawalByIdResponse.setTimestamp(withdrawal.getTimestamp());
-
-        return cancelWithdrawalByIdResponse;
     }
 }

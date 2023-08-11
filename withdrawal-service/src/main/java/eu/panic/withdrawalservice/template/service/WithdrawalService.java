@@ -11,6 +11,6 @@ import java.util.List;
 public interface WithdrawalService {
     CreateWithdrawalResponse createWithdrawal(String jwtToken, CreateWithdrawalRequest createWithdrawalRequest);
     List<Withdrawal> getWithdrawalsByUsername(String jwtToken);
-    CancelWithdrawalByIdResponse cancelWithdrawalById(String jwtToken, CancelWithdrawalByIdRequest cancelWithdrawalByIdRequest);
+    void cancelWithdrawalById(String jwtToken, CancelWithdrawalByIdRequest cancelWithdrawalByIdRequest);
 
 }

@@ -356,7 +356,7 @@ public class GameTowerServiceImpl implements GameTowerService {
 
         String jsonRequest = gson.toJson(gameMessage);
 
-        rabbitTemplate.convertAndSend("game-queue", jsonRequest);
+        //rabbitTemplate.convertAndSend("game-queue", jsonRequest);
 
         return gameTowerPlayResponse;
     }

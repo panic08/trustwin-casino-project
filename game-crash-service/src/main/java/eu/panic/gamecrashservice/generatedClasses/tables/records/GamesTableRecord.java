@@ -78,14 +78,14 @@ public class GamesTableRecord extends UpdatableRecordImpl<GamesTableRecord> impl
     }
 
     /**
-     * Setter for <code>public.games_table.win</code>.
+     * Setter for <code>public.games_table.bet</code>.
      */
     public void setBet(Long value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>public.games_table.win</code>.
+     * Getter for <code>public.games_table.bet</code>.
      */
     public Long getBet() {
         return (Long) get(4);

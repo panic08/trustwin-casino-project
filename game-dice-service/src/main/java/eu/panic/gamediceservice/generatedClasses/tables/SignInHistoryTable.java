@@ -12,12 +12,12 @@ import java.util.function.Function;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
-import org.jooq.Function9;
+import org.jooq.Function6;
 import org.jooq.Identity;
 import org.jooq.Name;
 import org.jooq.Record;
 import org.jooq.Records;
-import org.jooq.Row9;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.SelectField;
 import org.jooq.Table;
@@ -64,21 +64,6 @@ public class SignInHistoryTable extends TableImpl<SignInHistoryTableRecord> {
      * The column <code>public.sign_in_history_table.browser_version</code>.
      */
     public final TableField<SignInHistoryTableRecord, String> BROWSER_VERSION = createField(DSL.name("browser_version"), SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * The column <code>public.sign_in_history_table.device_name</code>.
-     */
-    public final TableField<SignInHistoryTableRecord, String> DEVICE_NAME = createField(DSL.name("device_name"), SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * The column <code>public.sign_in_history_table.device_type</code>.
-     */
-    public final TableField<SignInHistoryTableRecord, String> DEVICE_TYPE = createField(DSL.name("device_type"), SQLDataType.VARCHAR(255).nullable(false), this, "");
-
-    /**
-     * The column <code>public.sign_in_history_table.operating_system</code>.
-     */
-    public final TableField<SignInHistoryTableRecord, String> OPERATING_SYSTEM = createField(DSL.name("operating_system"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>public.sign_in_history_table.ip_address</code>.
@@ -185,18 +170,18 @@ public class SignInHistoryTable extends TableImpl<SignInHistoryTableRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Long, String, String, String, String, String, String, Long, String> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row6<Long, String, String, String, Long, String> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function9<? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function6<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -204,7 +189,7 @@ public class SignInHistoryTable extends TableImpl<SignInHistoryTableRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function9<? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function6<? super Long, ? super String, ? super String, ? super String, ? super Long, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

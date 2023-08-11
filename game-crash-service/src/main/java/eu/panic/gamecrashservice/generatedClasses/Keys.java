@@ -10,14 +10,12 @@ import eu.panic.gamecrashservice.generatedClasses.tables.MessagesTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.UsersTable;
-import eu.panic.gamecrashservice.generatedClasses.tables.WithdrawalsTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.records.FlywaySchemaHistoryRecord;
 import eu.panic.gamecrashservice.generatedClasses.tables.records.GamesTableRecord;
 import eu.panic.gamecrashservice.generatedClasses.tables.records.MessagesTableRecord;
 import eu.panic.gamecrashservice.generatedClasses.tables.records.ReplenishmentsTableRecord;
 import eu.panic.gamecrashservice.generatedClasses.tables.records.SignInHistoryTableRecord;
 import eu.panic.gamecrashservice.generatedClasses.tables.records.UsersTableRecord;
-import eu.panic.gamecrashservice.generatedClasses.tables.records.WithdrawalsTableRecord;
 
 import org.jooq.TableField;
 import org.jooq.UniqueKey;
@@ -42,5 +40,4 @@ public class Keys {
     public static final UniqueKey<ReplenishmentsTableRecord> REPLENISHMENTS_TABLE_PKEY = Internal.createUniqueKey(ReplenishmentsTable.REPLENISHMENTS_TABLE, DSL.name("replenishments_table_pkey"), new TableField[] { ReplenishmentsTable.REPLENISHMENTS_TABLE.ID }, true);
     public static final UniqueKey<SignInHistoryTableRecord> SIGN_IN_HISTORY_TABLE_PKEY = Internal.createUniqueKey(SignInHistoryTable.SIGN_IN_HISTORY_TABLE, DSL.name("sign_in_history_table_pkey"), new TableField[] { SignInHistoryTable.SIGN_IN_HISTORY_TABLE.ID }, true);
     public static final UniqueKey<UsersTableRecord> USERS_TABLE_PKEY = Internal.createUniqueKey(UsersTable.USERS_TABLE, DSL.name("users_table_pkey"), new TableField[] { UsersTable.USERS_TABLE.ID }, true);
-    public static final UniqueKey<WithdrawalsTableRecord> WITHDRAWALS_TABLE_PKEY = Internal.createUniqueKey(WithdrawalsTable.WITHDRAWALS_TABLE, DSL.name("withdrawals_table_pkey"), new TableField[] { WithdrawalsTable.WITHDRAWALS_TABLE.ID }, true);
 }

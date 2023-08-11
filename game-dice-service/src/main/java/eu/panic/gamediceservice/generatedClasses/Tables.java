@@ -6,10 +6,10 @@ package eu.panic.gamediceservice.generatedClasses;
 
 import eu.panic.gamediceservice.generatedClasses.tables.FlywaySchemaHistory;
 import eu.panic.gamediceservice.generatedClasses.tables.GamesTable;
+import eu.panic.gamediceservice.generatedClasses.tables.MessagesTable;
 import eu.panic.gamediceservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gamediceservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gamediceservice.generatedClasses.tables.UsersTable;
-import eu.panic.gamediceservice.generatedClasses.tables.WithdrawalsTable;
 
 
 /**
@@ -29,6 +29,11 @@ public class Tables {
     public static final GamesTable GAMES_TABLE = GamesTable.GAMES_TABLE;
 
     /**
+     * The table <code>public.messages_table</code>.
+     */
+    public static final MessagesTable MESSAGES_TABLE = MessagesTable.MESSAGES_TABLE;
+
+    /**
      * The table <code>public.replenishments_table</code>.
      */
     public static final ReplenishmentsTable REPLENISHMENTS_TABLE = ReplenishmentsTable.REPLENISHMENTS_TABLE;
@@ -42,9 +47,4 @@ public class Tables {
      * The table <code>public.users_table</code>.
      */
     public static final UsersTable USERS_TABLE = UsersTable.USERS_TABLE;
-
-    /**
-     * The table <code>public.withdrawals_table</code>.
-     */
-    public static final WithdrawalsTable WITHDRAWALS_TABLE = WithdrawalsTable.WITHDRAWALS_TABLE;
 }

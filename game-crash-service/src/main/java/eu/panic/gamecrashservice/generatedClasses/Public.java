@@ -10,7 +10,6 @@ import eu.panic.gamecrashservice.generatedClasses.tables.MessagesTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.UsersTable;
-import eu.panic.gamecrashservice.generatedClasses.tables.WithdrawalsTable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -64,11 +63,6 @@ public class Public extends SchemaImpl {
     public final UsersTable USERS_TABLE = UsersTable.USERS_TABLE;
 
     /**
-     * The table <code>public.withdrawals_table</code>.
-     */
-    public final WithdrawalsTable WITHDRAWALS_TABLE = WithdrawalsTable.WITHDRAWALS_TABLE;
-
-    /**
      * No further instances allowed
      */
     private Public() {
@@ -89,8 +83,7 @@ public class Public extends SchemaImpl {
             MessagesTable.MESSAGES_TABLE,
             ReplenishmentsTable.REPLENISHMENTS_TABLE,
             SignInHistoryTable.SIGN_IN_HISTORY_TABLE,
-            UsersTable.USERS_TABLE,
-            WithdrawalsTable.WITHDRAWALS_TABLE
+            UsersTable.USERS_TABLE
         );
     }
 }

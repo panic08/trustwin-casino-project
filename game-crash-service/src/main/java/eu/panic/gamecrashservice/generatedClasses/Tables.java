@@ -10,7 +10,6 @@ import eu.panic.gamecrashservice.generatedClasses.tables.MessagesTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.ReplenishmentsTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.SignInHistoryTable;
 import eu.panic.gamecrashservice.generatedClasses.tables.UsersTable;
-import eu.panic.gamecrashservice.generatedClasses.tables.WithdrawalsTable;
 
 
 /**
@@ -48,9 +47,4 @@ public class Tables {
      * The table <code>public.users_table</code>.
      */
     public static final UsersTable USERS_TABLE = UsersTable.USERS_TABLE;
-
-    /**
-     * The table <code>public.withdrawals_table</code>.
-     */
-    public static final WithdrawalsTable WITHDRAWALS_TABLE = WithdrawalsTable.WITHDRAWALS_TABLE;
 }

@@ -19,17 +19,19 @@
         <module name="notification-service" />
         <module name="authservice" />
         <module name="management-game-service" />
-        <module name="bonus-service" />
         <module name="game-crash-service" />
+        <module name="admin-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="auth-service" target="17" />
+      <module name="bonus-service" target="17" />
       <module name="game-plinko-service" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="admin-service" options="-parameters" />
       <module name="auth-service" options="-parameters" />
       <module name="authservice" options="-parameters" />
       <module name="bonus-service" options="-parameters" />

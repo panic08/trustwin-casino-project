@@ -64,14 +64,14 @@ public class ReplenishmentsTableRecord extends UpdatableRecordImpl<Replenishment
     }
 
     /**
-     * Setter for <code>public.replenishments_table.win</code>.
+     * Setter for <code>public.replenishments_table.amount</code>.
      */
     public void setAmount(Double value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>public.replenishments_table.win</code>.
+     * Getter for <code>public.replenishments_table.amount</code>.
      */
     public Double getAmount() {
         return (Double) get(3);

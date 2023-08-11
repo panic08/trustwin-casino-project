@@ -67,7 +67,7 @@ public class UsersTable extends TableImpl<UsersTableRecord> {
     /**
      * The column <code>public.users_table.authorize_type</code>.
      */
-    public final TableField<UsersTableRecord, Short> AUTHORIZE_TYPE = createField(DSL.name("authorize_type"), SQLDataType.SMALLINT.nullable(false), this, "");
+    public final TableField<UsersTableRecord, String> AUTHORIZE_TYPE = createField(DSL.name("authorize_type"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
      * The column <code>public.users_table.client_seed</code>.
@@ -215,7 +215,7 @@ public class UsersTable extends TableImpl<UsersTableRecord> {
     @Override
     public List<Check<UsersTableRecord>> getChecks() {
         return Arrays.asList(
-            Internal.createCheck(this, DSL.name("users_table_authorize_type_check"), "(((authorize_type >= 0) AND (authorize_type <= 1)))", true),
+            Internal.createCheck(this, DSL.name("users_table_authorize_type_check"), "(((authorize_type)::text = ANY ((ARRAY['DEFAULT'::character varying, 'GOOGLE'::character varying])::text[])))", true),
             Internal.createCheck(this, DSL.name("users_table_gender_check"), "(((gender)::text = ANY ((ARRAY['MALE'::character varying, 'FEMALE'::character varying, 'OTHER'::character varying])::text[])))", true),
             Internal.createCheck(this, DSL.name("users_table_rank_check"), "(((rank)::text = ANY ((ARRAY['NEWBIE'::character varying, 'BEGINNER'::character varying, 'AMATEUR'::character varying, 'GAMBLING'::character varying, 'PRO'::character varying, 'SHARK'::character varying, 'MASTER'::character varying, 'GRANDMASTER'::character varying, 'CASH_MACHINE'::character varying, 'DRAKE'::character varying, 'DIAMOND'::character varying, 'SUPERIOR'::character varying, 'LEGEND'::character varying, 'INTERNATIONAL'::character varying, 'IMMORTAL'::character varying, 'GODLIKE'::character varying, 'DIVINE'::character varying])::text[])))", true),
             Internal.createCheck(this, DSL.name("users_table_role_check"), "(((role)::text = ANY ((ARRAY['DEFAULT'::character varying, 'MODERATOR'::character varying, 'ADMIN'::character varying])::text[])))", true)
@@ -266,14 +266,14 @@ public class UsersTable extends TableImpl<UsersTableRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row22<Long, Long, Short, String, String, String, String, String, Boolean, Boolean, String, String, String, String, Long, Long, String, Integer, String, Long, String, String> fieldsRow() {
+    public Row22<Long, Long, String, String, String, String, String, String, Boolean, Boolean, String, String, String, String, Long, Long, String, Integer, String, Long, String, String> fieldsRow() {
         return (Row22) super.fieldsRow();
     }
 
     /**
      * Convenience mapping calling {@link SelectField#convertFrom(Function)}.
      */
-    public <U> SelectField<U> mapping(Function22<? super Long, ? super Long, ? super Short, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super Integer, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Function22<? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super Integer, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
         return convertFrom(Records.mapping(from));
     }
 
@@ -281,7 +281,7 @@ public class UsersTable extends TableImpl<UsersTableRecord> {
      * Convenience mapping calling {@link SelectField#convertFrom(Class,
      * Function)}.
      */
-    public <U> SelectField<U> mapping(Class<U> toType, Function22<? super Long, ? super Long, ? super Short, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super Integer, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
+    public <U> SelectField<U> mapping(Class<U> toType, Function22<? super Long, ? super Long, ? super String, ? super String, ? super String, ? super String, ? super String, ? super String, ? super Boolean, ? super Boolean, ? super String, ? super String, ? super String, ? super String, ? super Long, ? super Long, ? super String, ? super Integer, ? super String, ? super Long, ? super String, ? super String, ? extends U> from) {
         return convertFrom(toType, Records.mapping(from));
     }
 }

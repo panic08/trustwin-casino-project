@@ -91,6 +91,12 @@ public class GameJackpotServiceImpl implements GameJackpotService {
             throw new InsufficientFundsException("You do not have enough money for this win");
         }
 
+        if (!userDto.getIsAccountNonLocked()){
+            log.warn("You have been temporarily blocked. For all questions contact support on service {}" +
+                    " method: handlePlayJackpot", GameJackpotServiceImpl.class);
+            throw new InvalidCredentialsException("You have been temporarily blocked. For all questions contact support");
+        }
+
         switch (gameJackpotPlayRequest.getRoom()){
             case SMALL -> {
                 if (gameJackpotState.getGameJackpotTypeSmall().getIsStarted()){
@@ -354,6 +360,7 @@ public class GameJackpotServiceImpl implements GameJackpotService {
 
         gameJackpotNewGameEvent.setType(GameEventType.NEW_GAME);
         gameJackpotNewGameEvent.setRoom(room);
+        gameJackpotNewGameEvent.setHappyTicket(happyTicket);
         gameJackpotNewGameEvent.setWinner(winner.getUser());
         gameJackpotNewGameEvent.setBet(winner.getBet());
         gameJackpotNewGameEvent.setWin((long) Math.floor(bank - (bank * 0.06)));
