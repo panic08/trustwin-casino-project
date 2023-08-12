@@ -51,6 +51,7 @@
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
+            <version>3.18.6</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,41 +77,6 @@
                         </exclude>
                     </excludes>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>
-                <executions>
-                    <execution>
-                        <id>generate-jooq-sources</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-
-                        <configuration>
-                            <jdbc>
-                                <driver>org.postgresql.Driver</driver>
-                                <url>jdbc:postgresql://localhost:5432/disa</url>
-                                <user>postgres</user>
-                                <password>1234</password>
-                            </jdbc>
-                            <generator>
-                                <name>org.jooq.codegen.JavaGenerator</name>
-                                <database>
-                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
-                                    <includes>.*</includes>
-                                    <excludes></excludes>
-                                    <inputSchema>public</inputSchema>
-                                </database>
-                                <target>
-                                    <packageName>eu.panic.gamejackpotservice.generatedClasses</packageName>
-                                    <directory>src/main/java</directory>
-                                </target>
-                            </generator>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
